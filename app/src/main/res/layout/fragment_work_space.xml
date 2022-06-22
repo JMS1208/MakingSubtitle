@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.view.workspace.WorkSpaceFragment">
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:menu="@menu/menu_work_space"
+        app:layout_constraintTop_toTopOf="parent"
+
+        />
+
+    <FrameLayout
+        android:id="@+id/exo_fl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        >
+        <com.google.android.exoplayer2.ui.StyledPlayerView
+            android:id="@+id/exo_vv"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_gravity="center_horizontal"
+            app:default_artwork="@drawable/ic_no_thumbnail"
+            app:use_artwork="true"
+            app:resize_mode="fixed_width"
+            />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/exo_fl"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/move_left_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3초 전"
+                android:textColor="@color/lightGrey"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
+                />
+            <Button
+                android:id="@+id/resume_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="재생"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
+                />
+            <Button
+                android:id="@+id/move_right_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3초 후"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
+                />
+            <Button
+                android:id="@+id/add_line_item_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="한줄 추가"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/timelines_rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

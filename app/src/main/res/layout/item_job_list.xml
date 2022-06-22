@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:background="@drawable/stroke_bg_orange"
+    android:padding="10dp"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <ImageView
+            android:layout_margin="10dp"
+            android:id="@+id/thumbnail_iv"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/ic_no_thumbnail" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/lightGrey"
+            />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="5dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/jobName"
+                android:textStyle="bold"
+                android:textColor="@color/lightGrey"
+                android:layout_marginEnd="10dp"
+                />
+            <TextView
+                android:id="@+id/job_Name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text= "투모로우(Tomorrow)"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="5dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fileName"
+                android:textStyle="bold"
+                android:textColor="@color/lightGrey"
+                android:layout_marginEnd="10dp"
+                />
+            <TextView
+                android:id="@+id/file_Name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text= "Tomorrow.srt"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="5dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bornDate"
+                android:textStyle="bold"
+                android:textColor="@color/lightGrey"
+                android:layout_marginEnd="10dp"
+                />
+            <TextView
+                android:id="@+id/job_bornDate_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text= "2022.06.21"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="5dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lastUpdate"
+                android:textStyle="bold"
+                android:textColor="@color/lightGrey"
+                android:layout_marginEnd="10dp"
+                />
+            <TextView
+                android:id="@+id/job_lastDate_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text= "2022.06.21"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+</FrameLayout>

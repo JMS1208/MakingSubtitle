@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/apk/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/stroke_bg_grey"
+    android:layout_marginBottom="5dp"
+    android:layout_marginStart="5dp"
+    android:layout_marginEnd="5dp"
+    android:padding="10dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/time_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        android:padding="5dp"
+        android:gravity="center"
+        >
+        <TextView
+            android:id="@+id/index_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text= "1"
+            android:layout_marginEnd="5dp"
+            android:textColor="@color/darkGrey"
+            />
+
+        <ImageButton
+            android:id="@+id/start_time_auto_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_auto_24" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text= "시작"
+            android:layout_marginEnd="5dp"
+            android:textColor="@color/darkGrey"
+            />
+
+        <com.jms.makingsubtitle.data.model.TimeEditText
+            android:id="@+id/start_time_et"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text= " - "
+            android:layout_marginEnd="5dp"
+            android:textColor="@color/darkGrey"
+            />
+        <ImageButton
+            android:id="@+id/end_time_auto_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_auto_24" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text= "끝"
+            android:layout_marginEnd="5dp"
+            android:textColor="@color/darkGrey"
+            />
+        <com.jms.makingsubtitle.data.model.TimeEditText
+            android:id="@+id/end_time_et"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/border_v"
+        app:layout_constraintTop_toBottomOf="@id/time_ll"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/vividOrange"
+        />
+
+    <EditText
+        android:id="@+id/line_content_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/border_v"
+        android:inputType="textMultiLine"
+        android:background="@android:color/transparent"
+        tools:text="여름의 한 가운 데에 우리가 있었다."
+        android:textSize="20sp"
+        android:imeOptions="actionDone"
+        android:textColor="@color/darkGrey"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

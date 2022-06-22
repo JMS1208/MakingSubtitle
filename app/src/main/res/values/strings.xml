@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">MakingSubTitle</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="menu_search_text">작업검색</string>
+    <string name="menu_add_text">작업추가</string>
+    <string name="jobName">작업명</string>
+    <string name="bornDate">최초 생성일자</string>
+    <string name="lastUpdate">마지막 수정일자</string>
+    <string name="fileName">저장될 파일명</string>
+</resources>
