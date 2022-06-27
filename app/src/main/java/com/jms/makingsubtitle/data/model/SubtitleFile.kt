@@ -16,7 +16,7 @@ data class SubtitleFile(@PrimaryKey(autoGenerate = false) val uuid: UUID = UUID.
                         var lastUpdate: Date = Date(),
                         var fileName: String = "",
                         var jobName: String = "",
-                        var contents: @RawValue MutableList<TimeLine>? = null,
+                        var contents: TimeLines = TimeLines(mutableListOf()),
                         var thumbnail: Bitmap? = null,
                         val type: String = TYPE_SRT,
 

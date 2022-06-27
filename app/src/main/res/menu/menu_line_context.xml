@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_item_copy_line"
+        android:title="복사하기" />
+    <item
+        android:id="@+id/menu_item_paste_line"
+        android:title="붙여넣기" />
+    <item
+        android:id="@+id/menu_item_add_upper_line"
+        android:title="위로 아이템 추가" />
+    <item
+        android:id="@+id/menu_item_add_lower_line"
+        android:title="아래로 아이템 추가" />
+</menu>

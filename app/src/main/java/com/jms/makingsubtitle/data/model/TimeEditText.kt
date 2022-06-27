@@ -37,6 +37,8 @@ class TimeEditText @JvmOverloads constructor(
             0,0
         )
 
+
+
         HH_EditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 clearFocus()
@@ -266,6 +268,13 @@ class TimeEditText @JvmOverloads constructor(
         MM_EditText.addTextChangedListener(textWatcher)
         SS_EditText.addTextChangedListener(textWatcher)
         MS_EditText.addTextChangedListener(textWatcher)
+    }
+
+    fun removeTextChangedListener(textWatcher: TextWatcher) {
+        HH_EditText.removeTextChangedListener(textWatcher)
+        MM_EditText.removeTextChangedListener(textWatcher)
+        SS_EditText.removeTextChangedListener(textWatcher)
+        MS_EditText.removeTextChangedListener(textWatcher)
     }
 
 

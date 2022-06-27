@@ -47,10 +47,19 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:orientation="horizontal">
-
+            <Button
+                android:id="@+id/prev_page_btn"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Prev"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
+                />
             <Button
                 android:id="@+id/move_left_btn"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="3초 전"
                 android:textColor="@color/lightGrey"
@@ -59,7 +68,8 @@
                 />
             <Button
                 android:id="@+id/resume_btn"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="재생"
                 android:layout_marginStart="3dp"
@@ -67,17 +77,19 @@
                 />
             <Button
                 android:id="@+id/move_right_btn"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="3초 후"
                 android:layout_marginStart="3dp"
                 android:layout_marginEnd="3dp"
                 />
             <Button
-                android:id="@+id/add_line_item_btn"
-                android:layout_width="wrap_content"
+                android:id="@+id/next_page_btn"
+                android:layout_weight="1"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="한줄 추가"
+                android:text="Next"
                 android:layout_marginStart="3dp"
                 android:layout_marginEnd="3dp"
                 />
@@ -89,11 +101,18 @@
             >
 
         </LinearLayout>
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/timelines_rv"
+
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
+            android:layout_height="match_parent">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/timelines_rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                />
+
+        </androidx.core.widget.NestedScrollView>
 
     </LinearLayout>
 

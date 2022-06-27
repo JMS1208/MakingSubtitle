@@ -7,8 +7,12 @@
         android:title="영상 가져오기"
         app:showAsAction="never" />
     <item
-        android:id="@+id/menu_item_select_subtitle"
-        android:title="자막 가져오기"
+        android:id="@+id/menu_item_select_subtitle_utf_8"
+        android:title="자막 가져오기 (UTF-8)"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_item_select_subtitle_euc_kr"
+        android:title="자막 가져오기 (EUC-KR)"
         app:showAsAction="never" />
     <item
         android:id="@+id/menu_item_set_subtitle_file_title"
@@ -22,4 +26,8 @@
         android:id="@+id/menu_item_delete_contents"
         android:title="자막 새로 만들기"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_item_add_line"
+        android:title="한줄 추가"
+        app:showAsAction="ifRoom" />
 </menu>

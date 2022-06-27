@@ -6,6 +6,8 @@ import androidx.room.migration.AutoMigrationSpec
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.jms.makingsubtitle.data.model.SubtitleFile
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 
 
 @Database(
@@ -25,12 +27,16 @@ abstract class SubtitleFileDatabase : RoomDatabase() {
         private var INSTANCE: SubtitleFileDatabase? = null
 
 
+        val moshi = Moshi.Builder()
+            .addLast(KotlinJsonAdapterFactory())
+            .build()
+
         private fun buildDatabase(context: Context): SubtitleFileDatabase =
             Room.databaseBuilder(
                 context.applicationContext,
                 SubtitleFileDatabase::class.java,
                 "subtitle-fileList"
-            ).build()
+            ).addTypeConverter(SubtitleFileTypeConverter(moshi)).build()
 
         fun getInstance(context: Context): SubtitleFileDatabase =
             INSTANCE ?: synchronized(SubtitleFileDatabase::class.java) {

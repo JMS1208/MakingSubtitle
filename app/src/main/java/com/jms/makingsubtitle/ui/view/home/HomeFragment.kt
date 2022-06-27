@@ -9,6 +9,8 @@ import android.widget.Filterable
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import android.widget.Toast
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +26,8 @@ import com.jms.makingsubtitle.databinding.ItemJobListBinding
 import com.jms.makingsubtitle.ui.viewmodel.MainViewModel
 import com.jms.makingsubtitle.util.Contants.DATE_FORMAT
 import com.jms.makingsubtitle.util.Contants.MakeToast
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
 class HomeFragment : Fragment() {
@@ -42,14 +46,14 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         // Inflate the layout for this fragment
         return binding.root
     }
 
 
-    private inner class JobListAdapter:
+    private inner class JobListAdapter :
         ListAdapter<SubtitleFile, JobListAdapter.ViewHolder>(DiffCallback), Filterable {
 
 
@@ -60,14 +64,16 @@ class HomeFragment : Fragment() {
                 itemBinding.apply {
                     jobNameTv.text = subtitleFile.jobName
                     val fileNameType = "${subtitleFile.fileName}.${subtitleFile.type}"
-                    fileNameTv.text =  fileNameType
+                    fileNameTv.text = fileNameType
                     jobBornDateTv.text = DateFormat.format(DATE_FORMAT, subtitleFile.bornDate)
                     jobLastDateTv.text = DateFormat.format(DATE_FORMAT, subtitleFile.lastUpdate)
                 }
 
                 itemView.setOnClickListener {
-                    val action = HomeFragmentDirections.actionFragmentHomeToFragmentWorkSpace(subtitleFile)
+                    val action =
+                        HomeFragmentDirections.actionFragmentHomeToFragmentWorkSpace(subtitleFile)
                     findNavController().navigate(action)
+
                 }
             }
         }
@@ -78,7 +84,7 @@ class HomeFragment : Fragment() {
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val subtitleFile =  currentList[position]
+            val subtitleFile = currentList[position]
             holder.bind(subtitleFile)
         }
 
@@ -90,7 +96,7 @@ class HomeFragment : Fragment() {
                     val filteredList = if (inputText.isEmpty()) {
                         unFilteredList
                     } else {
-                        unFilteredList.filter{ it.fileName.contains(inputText)}
+                        unFilteredList.filter { it.fileName.contains(inputText) }
                     }
 
                     return FilterResults().apply {
@@ -119,15 +125,15 @@ class HomeFragment : Fragment() {
         binding.jobListRv.adapter = adapter
         binding.jobListRv.layoutManager = LinearLayoutManager(requireContext())
 
-        viewModel.subtitleFileListLiveData.observe(viewLifecycleOwner) { subtitleFileList ->
+        adapter.submitList(emptyList())
 
-            subtitleFileList?.also {
+        viewLifecycleOwner.lifecycleScope.launch {
+
+            viewModel.subtitleFileList.collectLatest {
                 adapter.submitList(it)
                 unFilteredList = it
-            } ?: also {
-                adapter.submitList(emptyList())
-                unFilteredList = emptyList()
             }
+
         }
 
 
