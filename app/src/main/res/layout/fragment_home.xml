@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/bg_grey"
     tools:context=".ui.view.home.HomeFragment">
 
     <androidx.appcompat.widget.Toolbar
@@ -11,8 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
+        app:buttonGravity="center_vertical"
         app:menu="@menu/menu_home"
-
+        style="@style/AppTheme.OverFlow"
+        android:background="@color/bg_toolbar"
         />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/jobList_rv"

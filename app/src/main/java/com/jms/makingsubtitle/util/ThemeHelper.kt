@@ -1,21 +1,18 @@
 package com.jms.makingsubtitle.util
 
 import android.os.Build
-import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatDelegate
+import com.jms.makingsubtitle.data.datastore.ThemeMode
 
 object ThemeHelper {
-    const val LIGHT_MODE = "light"
-    const val DARK_MODE = "dark"
-    const val DEFAULT_MODE = "default"
 
     fun applyTheme(themePref: String) {
         when (themePref) {
-            LIGHT_MODE -> {
+            ThemeMode.LIGHT.value -> {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
 
-            DARK_MODE -> {
+            ThemeMode.DARK.value -> {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             }
 

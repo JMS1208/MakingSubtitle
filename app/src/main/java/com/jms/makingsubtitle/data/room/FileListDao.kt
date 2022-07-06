@@ -12,9 +12,8 @@ import java.util.*
 @Dao
 interface FileListDao {
 
-    @Query("SELECT * FROM SubtitleFileList")
-    //fun getSubtitleFileList(): LiveData<List<SubtitleFile>>
-    fun getSubtitleFileList(): Flow<List<SubtitleFile>>
+    @Query("SELECT * FROM SubtitleFileList ORDER BY SubtitleFileList.lastUpdate DESC")
+    fun getAllSubtitleFileList(): LiveData<List<SubtitleFile>>
 
     @Query("SELECT * FROM SubtitleFileList WHERE uuid = :uuid")
     fun getSubtitleByUUID(uuid: UUID) : LiveData<SubtitleFile>
@@ -30,15 +29,17 @@ interface FileListDao {
     suspend fun deleteAllSubtitleFiles()
 
 
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSubtitleFile(subtitleFile: SubtitleFile)
 
-    @Delete
-    suspend fun deleteSubtitleFile(subtitleFile: SubtitleFile)
+    @Query("DELETE FROM SubtitleFileList WHERE uuid = :uuid")
+    suspend fun deleteSubtitleFileByUUID(uuid: UUID)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateSubtitleFile(subtitleFile: SubtitleFile)
+
+    @Query("SELECT SubtitleFileList.contents FROM SubtitleFileList WHERE uuid = :uuid")
+    fun getTimeLinesByUUID(uuid: UUID): LiveData<TimeLines>
 
 
 }

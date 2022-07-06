@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "1566c1452e6d4c16772c0e7bd686cdaf",
+    "identityHash": "abfff0524ad4fdb1745e961bb8a469d2",
     "entities": [
       {
         "tableName": "SubtitleFileList",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uuid` TEXT NOT NULL, `bornDate` INTEGER NOT NULL, `lastUpdate` INTEGER NOT NULL, `fileName` TEXT NOT NULL, `jobName` TEXT NOT NULL, `contents` TEXT NOT NULL, `thumbnail` BLOB, `type` TEXT NOT NULL, PRIMARY KEY(`uuid`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uuid` TEXT NOT NULL, `bornDate` INTEGER NOT NULL, `lastUpdate` INTEGER NOT NULL, `fileName` TEXT NOT NULL, `jobName` TEXT NOT NULL, `contents` TEXT NOT NULL, `thumbnailUri` TEXT, `type` TEXT NOT NULL, PRIMARY KEY(`uuid`))",
         "fields": [
           {
             "fieldPath": "uuid",
@@ -45,9 +45,9 @@
             "notNull": true
           },
           {
-            "fieldPath": "thumbnail",
-            "columnName": "thumbnail",
-            "affinity": "BLOB",
+            "fieldPath": "thumbnailUri",
+            "columnName": "thumbnailUri",
+            "affinity": "TEXT",
             "notNull": false
           },
           {
@@ -70,7 +70,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1566c1452e6d4c16772c0e7bd686cdaf')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'abfff0524ad4fdb1745e961bb8a469d2')"
     ]
   }
 }

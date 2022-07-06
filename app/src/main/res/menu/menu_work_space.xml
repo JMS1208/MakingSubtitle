@@ -3,8 +3,16 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/menu_item_select_video"
-        android:title="영상 가져오기"
+        android:id="@+id/menu_item_settings_work_space"
+        android:title="설정"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_item_select_video_file"
+        android:title="영상 파일 가져오기"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_item_select_video_youtube"
+        android:title="유튜브 영상 가져오기"
         app:showAsAction="never" />
     <item
         android:id="@+id/menu_item_select_subtitle_utf_8"
@@ -19,12 +27,16 @@
         android:title="자막파일명 지정"
         app:showAsAction="never" />
     <item
-        android:id="@+id/menu_item_set_thumbnail"
-        android:title="섬네일 지정"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/menu_item_delete_contents"
         android:title="자막 새로 만들기"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_item_export_subtitle_file"
+        android:title="자막 파일 내보내기"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_item_remove_players"
+        android:title="영상 내리기"
         app:showAsAction="never" />
     <item
         android:id="@+id/menu_item_add_line"

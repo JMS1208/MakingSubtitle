@@ -13,6 +13,9 @@
         <argument
             android:name="subtitleJob"
             app:argType="com.jms.makingsubtitle.data.model.SubtitleFile" />
+        <action
+            android:id="@+id/action_fragment_work_space_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/fragment_home"
@@ -22,6 +25,15 @@
         <action
             android:id="@+id/action_fragment_home_to_fragment_work_space"
             app:destination="@id/fragment_work_space"
-            />
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_fragment_home_to_settingsFragment"
+            app:destination="@id/settingsFragment"
+            app:popUpToInclusive="true" />
     </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.jms.makingsubtitle.ui.view.settings.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
 </navigation>

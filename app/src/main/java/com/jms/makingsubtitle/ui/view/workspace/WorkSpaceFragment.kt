@@ -2,40 +2,51 @@ package com.jms.makingsubtitle.ui.view.workspace
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.widget.PopupMenuCompat
-import androidx.core.widget.doAfterTextChanged
+import androidx.core.view.*
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.*
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.util.Util
 import com.google.android.material.snackbar.Snackbar
 import com.jms.makingsubtitle.MainActivity
 import com.jms.makingsubtitle.R
-import com.jms.makingsubtitle.data.model.TimeEditText
 import com.jms.makingsubtitle.data.model.TimeLine
+import com.jms.makingsubtitle.data.model.VideoTime
 import com.jms.makingsubtitle.databinding.DialogAddLineBinding
+import com.jms.makingsubtitle.databinding.DialogVideoUrlLinkBinding
 import com.jms.makingsubtitle.databinding.FragmentWorkSpaceBinding
 import com.jms.makingsubtitle.databinding.ItemLineListBinding
 import com.jms.makingsubtitle.ui.viewmodel.MainViewModel
 import com.jms.makingsubtitle.util.Contants.LAST_LINE_NUM
 import com.jms.makingsubtitle.util.Contants.MakeToast
+import com.jms.makingsubtitle.util.Contants.REQUEST_EXPORT_FILE
 import com.jms.makingsubtitle.util.Contants.REQUEST_SUBTITLE_EUC_KR
 import com.jms.makingsubtitle.util.Contants.REQUEST_SUBTITLE_UTF_8
 import com.jms.makingsubtitle.util.Contants.REQUEST_VIDEO
-import com.jms.makingsubtitle.util.Contants.convertTimeLineListToPage
-import com.jms.makingsubtitle.util.Contants.convertTimeLinesToPage
+import com.jms.makingsubtitle.util.Contants.YOUTUBE_BASE_URL
+import com.jms.makingsubtitle.util.Contants.YOUTUBE_BASE_URL_MOBILE
+
+import com.jms.makingsubtitle.data.datastore.LeafTimeMode
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerCallback
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTubePlayerTracker
 import kotlinx.coroutines.*
+import java.io.FileOutputStream
 
 
 class WorkSpaceFragment : Fragment() {
@@ -44,19 +55,224 @@ class WorkSpaceFragment : Fragment() {
         (activity as MainActivity).viewModel
     }
     private val args by navArgs<WorkSpaceFragmentArgs>()
-    private val exoplayer: ExoPlayer by lazy {
-        ExoPlayer.Builder(requireContext()).build()
-    }
+    private var exoplayer: ExoPlayer? = null
+
     private var _binding: FragmentWorkSpaceBinding? = null
     private val binding get() = _binding!!
 
-    private var stopPosition: Long = 0
-
-    private val LEAF_TIME = 3000
 
     private var copiedTimeLine: TimeLine? = null
 
-    private var storedTime: Long = System.currentTimeMillis()
+
+    private var playbackPosition = 0L
+
+    private var youtubePlayPosition = 0F
+
+    private val tracker = YouTubePlayerTracker()
+
+    private var recyclerViewState: Parcelable? = null
+
+
+    private fun initializeExoPlayer() {
+        exoplayer = ExoPlayer.Builder(requireContext()).build()
+        binding.exoVv.hideController()
+        hideSystemUI()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        binding.exoVv.player?.apply {
+            this.pause()
+            this.release()
+        }
+        binding.exoVv.player = null
+        exoplayer = null
+
+        binding.pvYoutube.apply {
+            getYouTubePlayerWhenReady(object : YouTubePlayerCallback {
+                override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
+                    youTubePlayer.pause()
+                }
+            }
+            )
+            removeYouTubePlayerListener(tracker)
+            release()
+        }
+
+        _binding = null
+    }
+
+    override fun onPause() { // 이때 플레이어 멈추고 재생시간 저장
+        super.onPause()
+
+        if (Util.SDK_INT < 24) {
+            when (tracker.state) { // 유튜브 재생시간 저장
+                PlayerConstants.PlayerState.PAUSED,
+                PlayerConstants.PlayerState.BUFFERING,
+                PlayerConstants.PlayerState.PLAYING -> {
+                    youtubePlayPosition = tracker.currentSecond
+                }
+                else -> {}
+            }
+
+            binding.exoVv.player?.let { // 엑소 재생시간 저장
+                playbackPosition = it.currentPosition
+            }
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        if (Util.SDK_INT >= 24) { // 이때 플레이어 멈추고 재생시간 저장
+            when (tracker.state) { // 유튜브 재생시간 저장
+                PlayerConstants.PlayerState.PAUSED,
+                PlayerConstants.PlayerState.BUFFERING,
+                PlayerConstants.PlayerState.PLAYING -> {
+                    youtubePlayPosition = tracker.currentSecond
+                }
+                else -> {}
+            }
+
+            binding.exoVv.player?.let { // 엑소 재생시간 저장
+                playbackPosition = it.currentPosition
+            }
+        }
+    }
+
+    override fun onStart() { // 이때 seekTo로 저장된 position 으로 세팅
+        super.onStart()
+        if (Util.SDK_INT >= 24) {
+            //initializePlayer()
+            binding.pvYoutube.getYouTubePlayerWhenReady(object : YouTubePlayerCallback {
+                override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
+                    youTubePlayer.seekTo(youtubePlayPosition)
+                }
+            })
+
+            binding.exoVv.player?.apply {
+                this.seekTo(playbackPosition)
+            }
+
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (Util.SDK_INT < 24 || exoplayer == null) { // 이때 seekTo로 저장된 position 으로 세팅
+            initializeExoPlayer()
+
+
+            binding.pvYoutube.getYouTubePlayerWhenReady(object : YouTubePlayerCallback {
+                override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
+                    youTubePlayer.seekTo(youtubePlayPosition)
+                }
+            })
+            binding.exoVv.player?.apply {
+                this.seekTo(playbackPosition)
+            }
+        }
+    }
+
+
+    private fun hideSystemUI() {
+        WindowCompat.setDecorFitsSystemWindows(activity?.window!!, false)
+        WindowInsetsControllerCompat(activity?.window!!, binding.exoVv).let { controller ->
+            controller.hide(WindowInsetsCompat.Type.systemBars())
+            controller.systemBarsBehavior =
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+
+        }
+    }
+
+
+    private fun setExoPlayerVisible() {
+        binding.exoVv.visibility = View.VISIBLE
+    }
+
+    private fun setYoutubePlayerVisible() {
+        binding.pvYoutube.visibility = View.VISIBLE
+    }
+
+    private fun setExoPlayerInvisible() {
+        binding.exoVv.visibility = View.GONE
+    }
+
+    private fun setYoutubePlayerInvisible() {
+        binding.pvYoutube.visibility = View.GONE
+    }
+
+    private fun setExoBtnVisible() {
+        setExoPlayerVisible()
+        setBtnVisible()
+    }
+
+    private fun setYoutubeBtnVisible() {
+        setYoutubePlayerVisible()
+        setBtnVisible()
+    }
+
+    private fun setExoBtnInvisible() {
+        setExoPlayerInvisible()
+        setBtnInvisible()
+    }
+
+    private fun setYoutubeBtnInvisible() {
+        setYoutubePlayerInvisible()
+        setBtnInvisible()
+    }
+
+    private fun setBtnVisible() {
+
+        binding.apply {
+            btnsPlayers.visibility = View.VISIBLE
+        }
+
+    }
+
+    private fun setBtnInvisible() {
+        binding.apply {
+            btnsPlayers.visibility = View.GONE
+        }
+    }
+
+    private fun releaseExoPlayer() {
+        binding.exoVv.player?.apply {
+            this.pause()
+            this.release()
+        }
+        binding.exoVv.player = null
+
+        exoplayer?.apply {
+            this.release()
+        }
+        exoplayer = null
+
+    }
+
+
+    private fun attachExoPlayer() {
+        exoplayer = ExoPlayer.Builder(requireContext()).build()
+        binding.exoVv.hideController()
+        binding.exoVv.player = exoplayer
+    }
+
+
+    private fun detachPlayers() {
+        binding.pvYoutube.getYouTubePlayerWhenReady(object : YouTubePlayerCallback {
+            override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
+                youtubePlayPosition = tracker.currentSecond
+                youTubePlayer.pause()
+            }
+        })
+        binding.exoVv.player?.apply {
+            playbackPosition = this.currentPosition
+            pause()
+        }
+        setExoBtnInvisible()
+        setYoutubeBtnInvisible()
+    }
 
 
     private val lineListItemHelper: ItemTouchHelper.Callback by lazy {
@@ -82,16 +298,18 @@ class WorkSpaceFragment : Fragment() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 (viewHolder as? SubtitleLineAdapter.ViewHolder)?.let {
-                    val timeLine = viewHolder.timeLine
 
-                    deleteTimeLine(viewHolder.timeLine.lineNum)
+                    val position = viewHolder.absoluteAdapterPosition
+                    val timeLine = viewHolder.timeLine.copy()
 
-                    Snackbar.make(requireView(), "삭제 되었습니다", Snackbar.LENGTH_SHORT).apply{
-                        setAction("취소") {
-                            //TODO {이거 수정해야됨 첫번째 라인 삭제시 오류 }
-                            addTimeLine(timeLine)
-                        }
-                    }.show()
+                    deleteTimeLine(position) // 0부터 시작
+
+                    Snackbar.make(requireView(), getString(R.string.deleted), Snackbar.LENGTH_SHORT)
+                        .apply {
+                            setAction(getString(R.string.cancellation)) {
+                                addTimeLine(position, timeLine)
+                            }
+                        }.show()
                 }
             }
 
@@ -108,8 +326,10 @@ class WorkSpaceFragment : Fragment() {
 
     private lateinit var adapter: SubtitleLineAdapter
 
-    private inner class SubtitleLineAdapter() :
-        ListAdapter<TimeLine, SubtitleLineAdapter.ViewHolder>(DiffCallback) {
+    private inner class SubtitleLineAdapter :
+        RecyclerView.Adapter<SubtitleLineAdapter.ViewHolder>() {
+
+        private var oldTimeLineList = mutableListOf<TimeLine>()
 
         inner class ViewHolder(val itemBinding: ItemLineListBinding) :
             RecyclerView.ViewHolder(itemBinding.root) {
@@ -121,7 +341,7 @@ class WorkSpaceFragment : Fragment() {
                 override fun onTextChanged(charSequence: CharSequence?, p1: Int, p2: Int, p3: Int) {
                     charSequence?.let {
 
-                        val timeLine = currentList[bindingAdapterPosition]
+                        val timeLine = oldTimeLineList[bindingAdapterPosition]
                         timeLine.lineContent = it.toString()
                         viewModel.updateSubtitleFile(args.subtitleJob)
                     }
@@ -129,39 +349,30 @@ class WorkSpaceFragment : Fragment() {
 
                 override fun afterTextChanged(p0: Editable?) {}
             }
-
             val startTimeWatcher = object : TextWatcher {
-                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-                }
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                     val startTimeET = itemBinding.startTimeEt
-                    val timeLine = currentList[bindingAdapterPosition]
+                    val timeLine = oldTimeLineList[bindingAdapterPosition]
                     timeLine.startTime = startTimeET.getVideoTime()
                     viewModel.updateSubtitleFile(args.subtitleJob)
                 }
 
-                override fun afterTextChanged(p0: Editable?) {
-
-                }
+                override fun afterTextChanged(p0: Editable?) {}
 
             }
             val endTimeWatcher = object : TextWatcher {
-                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-                }
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                     val endTimeET = itemBinding.endTimeEt
-                    val timeLine = currentList[bindingAdapterPosition]
-                    timeLine.startTime = endTimeET.getVideoTime()
+                    val timeLine = oldTimeLineList[bindingAdapterPosition]
+                    timeLine.endTime = endTimeET.getVideoTime()
                     viewModel.updateSubtitleFile(args.subtitleJob)
                 }
 
-                override fun afterTextChanged(p0: Editable?) {
-
-                }
+                override fun afterTextChanged(p0: Editable?) {}
 
             }
 
@@ -184,8 +395,6 @@ class WorkSpaceFragment : Fragment() {
 
             fun bind(timeLine: TimeLine) {
                 this.timeLine = timeLine
-
-
                 itemView.setOnLongClickListener {
 
                     val popup = PopupMenu(requireContext(), itemView)
@@ -196,25 +405,45 @@ class WorkSpaceFragment : Fragment() {
                             when (menuItem.itemId) {
                                 R.id.menu_item_copy_line -> {
                                     copiedTimeLine = timeLine
-                                    MakeToast(requireContext(),"복사 되었습니다")
+                                    MakeToast(requireContext(), getString(R.string.copied))
+
                                     true
                                 }
                                 R.id.menu_item_paste_line -> {
                                     copiedTimeLine?.let {
-                                        it.lineNum = timeLine.lineNum
-                                        bind(it)
-                                    } ?: MakeToast(requireContext(),"복사한 내용이 없습니다")
+                                        args.subtitleJob.contents.timeLines[absoluteAdapterPosition] =
+                                            it
+                                        viewModel.updateSubtitleFile(args.subtitleJob)
+
+                                    } ?: MakeToast(
+                                        requireContext(),
+                                        getString(R.string.nothingCopied)
+                                    )
                                     true
                                 }
-                                R.id.menu_item_add_upper_line-> {
-                                    addTimeLine(timeLine.lineNum)
-                                    MakeToast(requireContext(),"추가되었습니다")
+                                R.id.menu_item_add_upper_line -> {
+                                    Log.d(
+                                        "TAG",
+                                        "위에꺼 포지션: ${this@ViewHolder.absoluteAdapterPosition}"
+                                    )
+
+                                    addTimeLine(this@ViewHolder.absoluteAdapterPosition, TimeLine())
+
+                                    MakeToast(requireContext(), getString(R.string.added))
                                     true
                                 }
 
-                                R.id.menu_item_add_lower_line-> {
-                                    addTimeLine(timeLine.lineNum + 1)
-                                    MakeToast(requireContext(), "추가되었습니다")
+                                R.id.menu_item_add_lower_line -> {
+                                    Log.d(
+                                        "TAG",
+                                        "아래꺼 포지션: ${this@ViewHolder.absoluteAdapterPosition + 1}"
+                                    )
+                                    addTimeLine(
+                                        this@ViewHolder.absoluteAdapterPosition + 1,
+                                        TimeLine()
+                                    )
+
+                                    MakeToast(requireContext(), getString(R.string.added))
                                     true
                                 }
 
@@ -229,9 +458,14 @@ class WorkSpaceFragment : Fragment() {
 
                 }
 
+
+
                 itemBinding.apply {
 
-                    indexTv.text = timeLine.lineNum.toString()
+                    val idx = this@ViewHolder.absoluteAdapterPosition + 1
+
+                    indexTv.text = idx.toString()
+
                     startTimeEt.apply {
                         setVideoTime(timeLine.startTime)
                     }
@@ -242,13 +476,46 @@ class WorkSpaceFragment : Fragment() {
 
                     startTimeAutoBtn.apply {
                         setOnClickListener {
-                            startTimeEt.setVideoTime(exoplayer.currentPosition)
+                            binding.exoVv.player?.let {
+                                args.subtitleJob.contents.timeLines[absoluteAdapterPosition].startTime =
+                                    VideoTime(it.currentPosition)
+                                viewModel.updateSubtitleFile(args.subtitleJob)
+                            }
+                            when (tracker.state) {
+                                PlayerConstants.PlayerState.PAUSED,
+                                PlayerConstants.PlayerState.PLAYING -> {
+                                    val startTime = (tracker.currentSecond * 1000).toLong()
+                                    args.subtitleJob.contents.timeLines[absoluteAdapterPosition].startTime =
+                                        VideoTime(startTime)
+
+                                    viewModel.updateSubtitleFile(args.subtitleJob)
+                                }
+                                else -> return@setOnClickListener
+                            }
+
                         }
                     }
 
                     endTimeAutoBtn.apply {
                         setOnClickListener {
-                            endTimeEt.setVideoTime(exoplayer.currentPosition)
+                            binding.exoVv.player?.let {
+                                args.subtitleJob.contents.timeLines[absoluteAdapterPosition].endTime =
+                                    VideoTime(it.currentPosition)
+
+                                viewModel.updateSubtitleFile(args.subtitleJob)
+                            }
+                            when (tracker.state) {
+                                PlayerConstants.PlayerState.PAUSED,
+                                PlayerConstants.PlayerState.PLAYING -> {
+                                    val endTime = (tracker.currentSecond * 1000).toLong()
+
+                                    args.subtitleJob.contents.timeLines[absoluteAdapterPosition].endTime =
+                                        VideoTime(endTime)
+
+                                    viewModel.updateSubtitleFile(args.subtitleJob)
+                                }
+                                else -> return@setOnClickListener
+                            }
                         }
                     }
 
@@ -262,12 +529,12 @@ class WorkSpaceFragment : Fragment() {
         }
 
         override fun onViewAttachedToWindow(holder: ViewHolder) {
-            (holder as ViewHolder).enableListener()
+            holder.enableListener()
             super.onViewAttachedToWindow(holder)
         }
 
         override fun onViewDetachedFromWindow(holder: ViewHolder) {
-            (holder as ViewHolder).disableListener()
+            holder.disableListener()
             super.onViewDetachedFromWindow(holder)
         }
 
@@ -277,24 +544,30 @@ class WorkSpaceFragment : Fragment() {
         }
 
         override fun getItemCount(): Int {
-            return currentList.size
+            return oldTimeLineList.size
         }
 
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val itemBinding = ItemLineListBinding.inflate(layoutInflater, parent, false)
-
-
             return ViewHolder(itemBinding)
         }
 
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val timeLine = currentList[holder.absoluteAdapterPosition]
+
+            val timeLine = oldTimeLineList[holder.absoluteAdapterPosition]
             holder.bind(timeLine)
 
-
         }
+
+        fun setData(newTimeLineList: MutableList<TimeLine>) {
+            val diffUtil = TimeLineDiffUtil(oldTimeLineList, newTimeLineList)
+            val diffResults = DiffUtil.calculateDiff(diffUtil)
+            oldTimeLineList = newTimeLineList
+            diffResults.dispatchUpdatesTo(this)
+        }
+
 
     }
 
@@ -302,9 +575,9 @@ class WorkSpaceFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentWorkSpaceBinding.inflate(inflater, container, false)
-        // Inflate the layout for this fragment
+
 
         return binding.root
     }
@@ -315,25 +588,110 @@ class WorkSpaceFragment : Fragment() {
         adapter = SubtitleLineAdapter()
         binding.timelinesRv.adapter = adapter
         binding.timelinesRv.layoutManager = LinearLayoutManager(requireContext())
-        viewModel.setupSubtitleFile(args.subtitleJob)
 
 
+        //viewModel.setupSubtitleFile(args.subtitleJob)
 
         ItemTouchHelper(lineListItemHelper).attachToRecyclerView(binding.timelinesRv)
 
+        lifecycle.addObserver(binding.pvYoutube)
+
+
+
+
         binding.toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.menu_item_select_video -> { //영상 가져오기
+                R.id.menu_item_settings_work_space-> {
+                    val action = WorkSpaceFragmentDirections.actionFragmentWorkSpaceToSettingsFragment()
+                    findNavController().navigate(action)
+
+                    true
+                }
+
+                R.id.menu_item_remove_players -> {
+                    detachPlayers()
+                    true
+                }
+
+                R.id.menu_item_select_video_file -> { //영상 가져오기
 
                     val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                         addCategory(Intent.CATEGORY_OPENABLE)
                         type = "video/*"
                     }
 
+                    detachPlayers() // 플레이어들, 버튼 다 안 보이게
+                    // 둘다 처리하는 이유는 가져오려다가 뒤로가기버튼해서 안가져오는 경우 있어서
+                    releaseExoPlayer()
+
                     startActivityForResult(intent, REQUEST_VIDEO)
+
 
                     true
                 }
+                R.id.menu_item_select_video_youtube -> {
+
+                    val dialogBinding = DialogVideoUrlLinkBinding.inflate(layoutInflater)
+                    val dialog = AlertDialog.Builder(requireContext())
+                        .setView(dialogBinding.root)
+                        .create()
+
+                    dialogBinding.apply {
+                        tvAddUrlLink.setOnClickListener {
+                            // 선택 버튼
+                            val url = etUrlLink.text.toString()
+
+                            if (url.isEmpty()) {
+                                MakeToast(requireContext(), getString(R.string.requestLink))
+                            } else {
+
+
+                                setExoPlayerInvisible()
+                                releaseExoPlayer()
+
+
+                                binding.pvYoutube.getYouTubePlayerWhenReady(object :
+                                    YouTubePlayerCallback {
+                                    override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
+                                        val videoId =
+                                            url.removePrefix(YOUTUBE_BASE_URL).removePrefix(
+                                                YOUTUBE_BASE_URL_MOBILE
+                                            )
+
+
+                                        val thumb = getString(R.string.thumbnailBaseUrl, videoId)
+                                        args.subtitleJob.thumbnailUri = Uri.parse(thumb)
+                                        viewModel.updateSubtitleFile(args.subtitleJob)
+
+
+                                        youTubePlayer.cueVideo(videoId, 0F)
+                                        youTubePlayer.addListener(tracker)
+                                        setYoutubeBtnVisible()
+                                    }
+
+                                })
+
+
+
+
+
+                                dialog.dismiss()
+                            }
+
+                        }
+
+                        tvCloseDialog.setOnClickListener {
+                            // 닫기 버튼
+                            dialog.dismiss()
+                        }
+
+                    }
+
+                    dialog.show()
+
+                    true
+                }
+
                 R.id.menu_item_select_subtitle_euc_kr -> { //기존 자막파일 가져오기
                     val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                         addCategory(Intent.CATEGORY_OPENABLE)
@@ -368,11 +726,8 @@ class WorkSpaceFragment : Fragment() {
 
                     true
                 }
-                R.id.menu_item_set_thumbnail -> { //섬네일 지정하기
 
-                    true
-                }
-                R.id.menu_item_add_line -> {
+                R.id.menu_item_add_line -> { //한줄 추가
 
                     val dialogBinding = DialogAddLineBinding.inflate(layoutInflater)
 
@@ -390,7 +745,11 @@ class WorkSpaceFragment : Fragment() {
                                 lineNumEt.text.toString().toInt()
                             else
                                 LAST_LINE_NUM
-                            addTimeLine(addLineNum)
+                            val position = if (addLineNum == LAST_LINE_NUM)
+                                LAST_LINE_NUM
+                            else
+                                addLineNum - 1
+                            addTimeLine(position, TimeLine())
                             dialog.dismiss()
                         }
                     }
@@ -401,146 +760,235 @@ class WorkSpaceFragment : Fragment() {
 
                     true
                 }
-                else -> {
-                    false
+
+                R.id.menu_item_export_subtitle_file -> {
+                    //자막 파일 내보내기
+                    val subtitleFile = args.subtitleJob
+                    val fileName = subtitleFile.fileName.replace(" ", "_") + "." + subtitleFile.type
+
+
+                    val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+                        //addCategory(Intent.CATEGORY_OPENABLE)
+                        type = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+                            "application/x-subrip"
+                        else
+                            "application/octet-stream"
+                        putExtra(Intent.EXTRA_TITLE, fileName)
+                    }
+
+                    startActivityForResult(intent, REQUEST_EXPORT_FILE)
+
+                    true
                 }
+                else -> false
+
 
             }
 
         }
 
-
-
-
-
         binding.resumeBtn.setOnClickListener {
 
             binding.exoVv.player?.apply {
                 if (isPlaying) {
-                    viewModel.setStopPosition(currentPosition)
                     pause()
+
+                    binding.resumeBtn.setImageResource(R.drawable.ic_play_24)
                 } else {
-                    seekTo(stopPosition)
+                    seekTo(this.currentPosition)
                     play()
+                    binding.resumeBtn.setImageResource(R.drawable.ic_pause_24)
                 }
+            }
+
+            if (binding.exoVv.player == null) {
+                binding.pvYoutube.getYouTubePlayerWhenReady(object : YouTubePlayerCallback {
+                    override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
+                        when (tracker.state) {
+                            PlayerConstants.PlayerState.PLAYING -> {
+                                youTubePlayer.pause()
+                                binding.resumeBtn.setImageResource(R.drawable.ic_play_24)
+                            }
+                            PlayerConstants.PlayerState.PAUSED,
+                            PlayerConstants.PlayerState.VIDEO_CUED -> {
+                                youTubePlayer.play()
+                                binding.resumeBtn.setImageResource(R.drawable.ic_pause_24)
+                            }
+                            else -> {}
+
+                        }
+
+
+                    }
+
+
+                })
             }
 
         }
 
         binding.moveLeftBtn.setOnClickListener {
             binding.exoVv.player?.apply {
-                val movePosition =
-                    if (currentPosition - LEAF_TIME < 0) 0 else currentPosition - LEAF_TIME
-                viewModel.setStopPosition(movePosition)
-                seekTo(movePosition)
-                if (isPlaying) {
-                    play()
+
+                lifecycleScope.launch {
+
+                    val movePosition =
+                        if (currentPosition - getLeafTime() * 1000 < 0) 0 else currentPosition - getLeafTime() * 1000
+                    seekTo(movePosition)
+
                 }
 
+
             }
+
+            if (binding.exoVv.player == null) {
+                binding.pvYoutube.getYouTubePlayerWhenReady(object : YouTubePlayerCallback {
+                    override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
+                        lifecycleScope.launch {
+                            youTubePlayer.seekTo(tracker.currentSecond - getLeafTime())
+                        }
+                    }
+
+                })
+            }
+
         }
 
         binding.moveRightBtn.setOnClickListener {
             binding.exoVv.player?.apply {
-                val movePosition = currentPosition + LEAF_TIME
-                viewModel.setStopPosition(movePosition)
-                seekTo(movePosition)
-                if (isPlaying) {
-                    play()
+                lifecycleScope.launch {
+                    val movePosition = currentPosition + getLeafTime() * 1000
+
+                    seekTo(movePosition)
+
                 }
-            }
-        }
-        binding.nextPageBtn.setOnClickListener {
 
-            val timeLineList: MutableList<TimeLine>? = viewModel.currentList.value
-            timeLineList?.let {
-                val page: Int = convertTimeLineListToPage(it)
-                setCurrentPage(page + 1)
-                //viewModel.setupCurrentList(page + 1)
+            }
+            if (binding.exoVv.player == null) {
+                binding.pvYoutube.getYouTubePlayerWhenReady(object : YouTubePlayerCallback {
+                    override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
+                        lifecycleScope.launch {
+                            youTubePlayer.seekTo(tracker.currentSecond + getLeafTime())
+                        }
+
+                    }
+
+                })
             }
 
-        }
-        binding.prevPageBtn.setOnClickListener {
-            val timeLineList: MutableList<TimeLine>? = viewModel.currentList.value
-            timeLineList?.let {
-                val page: Int = convertTimeLineListToPage(it)
-                setCurrentPage(page - 1)
-                //viewModel.setupCurrentList(page - 1)
-            }
         }
 
 
 
 
-
-        viewModel.videoUri.observe(viewLifecycleOwner) { videoUri ->
+        viewModel.videoUri.observe(viewLifecycleOwner)
+        { videoUri ->
 
             videoUri?.let {
 
+
+                args.subtitleJob.thumbnailUri = it
+                viewModel.updateSubtitleFile(args.subtitleJob)
+
+
                 val mediaItem = MediaItem.fromUri(it)
+
+                exoplayer?.apply {
+                    attachExoPlayer() // 엑소플레이어 빌드하고, 비디오뷰에 붙여줌
+                    setExoBtnVisible()
+                    initializeExoPlayer()
+                }
                 binding.exoVv.apply {
-                    player = exoplayer
                     controllerAutoShow = false
                     player?.apply {
                         setMediaItem(mediaItem)
                         prepare()
-                        seekTo(stopPosition)
+                        seekTo(0)
                     }
                 }
             }
         }
 
-        viewModel.stopPosition.observe(viewLifecycleOwner) {
-            stopPosition = it
+
+        viewModel.getTimeLinesByUUID(args.subtitleJob.uuid)
+            .observe(viewLifecycleOwner) { timeLines ->
+                timeLines?.let {
+
+                    adapter.setData(timeLines.timeLines)
+
+                }
+
+            }
+
+    }
+
+    private suspend fun getLeafTime(): Int {
+        return when (viewModel.getLeafTimeMode()) {
+            LeafTimeMode.ONE_SECOND.value -> 1
+            LeafTimeMode.THREE_SECOND.value -> 3
+            LeafTimeMode.FIVE_SECOND.value -> 5
+            LeafTimeMode.SEVEN_SECOND.value -> 7
+            LeafTimeMode.TEN_SECOND.value -> 10
+            else -> 5
+        }
+    }
+
+    private fun addTimeLine(position: Int = LAST_LINE_NUM, timeLine: TimeLine = TimeLine()) {
+        if (position == LAST_LINE_NUM) {
+            args.subtitleJob.contents.timeLines.add(timeLine)
+            viewModel.updateSubtitleFile(args.subtitleJob)
+        } else {
+            args.subtitleJob.contents.timeLines.add(position, timeLine)
+            viewModel.updateSubtitleFile(args.subtitleJob)
         }
 
+    }
 
-        viewModel.currentList.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
+
+    private fun deleteTimeLine(position: Int) {
+        args.subtitleJob.contents.timeLines.removeAt(position)
+        viewModel.updateSubtitleFile(args.subtitleJob)
+    }
+
+
+    private fun exportFile(uri: Uri?) {
+        uri?.let {
+            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+                activity?.contentResolver?.openFileDescriptor(uri, "w").use {
+
+                    FileOutputStream(it!!.fileDescriptor).use { fs ->
+                        writeSubtitleFile(fs)
+                        it.close()
+                    }
+
+                }
+
+                //TODO 애니메이션
+            }
         }
 
-        viewModel.loadedSubtitleFile.observe(viewLifecycleOwner) {
-            viewModel.setupCurrentList(1)
-        }
-
-
     }
 
-    private fun addTimeLine(timeLine: TimeLine) {
-        viewModel.addTimeLine(timeLine)
-    }
+    private fun writeSubtitleFile(outputStream: FileOutputStream?) {
+        outputStream?.use {
 
-    private fun addTimeLine(lineNum: Int = LAST_LINE_NUM) {
-        viewModel.addTimeLine(lineNum)
-    }
+            val subtitle = args.subtitleJob.contents
 
-    private fun deleteTimeLine(lineNum: Int) {
-        viewModel.deleteTimeLine(lineNum)
-    }
+            val timeLines = subtitle.timeLines
 
-    private fun setCurrentPage(page: Int) {
+            for (i in timeLines.indices) {
+                if (timeLines[i].lineContent.isNotBlank()) {
+                    val timeLine = timeLines[i]
 
-        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-            val subtitleFile = viewModel.getSubtitleFileByUUID(args.subtitleJob.uuid)
-
-            val lastPage = convertTimeLinesToPage(subtitleFile.contents)
-
-            withContext(Dispatchers.Main) {
-                when {
-                    page < 1 -> {
-                        MakeToast(requireContext(), "첫번째 페이지입니다")
-                    }
-                    page > lastPage -> {
-                        MakeToast(requireContext(), "마지막 페이지입니다")
-                    }
-                    else -> {
-                        viewModel.setupCurrentList(page)
-                    }
+                    val line =
+                        "${i + 1}\n${timeLine.startTime} --> ${timeLine.endTime}\n${timeLine.lineContent}\n\n"
+                    outputStream.write(line.toByteArray())
                 }
             }
 
-        }
+            outputStream.close()
 
+        }
 
     }
 
@@ -557,7 +1005,7 @@ class WorkSpaceFragment : Fragment() {
                         viewModel.setVideoUri(uri)
 
 
-                    } ?: MakeToast(requireContext(), "영상을 가져오는 데 실패하였습니다")
+                    } ?: MakeToast(requireContext(), getString(R.string.getVideoFailed))
                 }
 
                 REQUEST_SUBTITLE_UTF_8 -> {
@@ -576,28 +1024,17 @@ class WorkSpaceFragment : Fragment() {
                     }
                 }
 
+                REQUEST_EXPORT_FILE -> {
+                    data?.let {
+                        val uri = it.data
+                        exportFile(uri)
+                    }
+                }
+
                 else -> {}
             }
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
 
-    }
-
-
-    companion object {
-        private val DiffCallback = object : DiffUtil.ItemCallback<TimeLine>() {
-            override fun areItemsTheSame(oldItem: TimeLine, newItem: TimeLine): Boolean {
-                return oldItem == newItem
-            }
-
-            override fun areContentsTheSame(oldItem: TimeLine, newItem: TimeLine): Boolean {
-                return oldItem == newItem
-            }
-
-        }
-    }
 }

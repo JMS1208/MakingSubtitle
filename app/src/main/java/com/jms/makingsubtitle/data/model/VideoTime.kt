@@ -3,12 +3,12 @@ package com.jms.makingsubtitle.data.model
 import android.os.Parcelable
 
 @kotlinx.parcelize.Parcelize
-open class VideoTime(
-    open var totalTime: Long = 0,
-    open var hh: Int = 0,
-    open var mm: Int = 0,
-    open var ss: Int = 0,
-    open var ms: Int = 0
+data class VideoTime(
+    var totalTime: Long = 0,
+    var hh: Int = 0,
+    var mm: Int = 0,
+    var ss: Int = 0,
+    var ms: Int = 0
 ) : Parcelable {
 
 

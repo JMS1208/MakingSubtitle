@@ -18,10 +18,10 @@
         android:gravity="center"
         android:hint="00"
         android:background="@android:color/transparent"
-        android:textColorHint="@color/darkGrey"
-        android:textColor="@color/mustardYellow"
+        android:textColor="@color/mainColor"
         android:imeOptions="actionDone"
         android:selectAllOnFocus="true"
+        android:imeActionLabel="다음"
         />
     <TextView
         android:layout_width="wrap_content"
@@ -29,7 +29,7 @@
         android:text=":"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
-        android:textColor="@color/mustardYellow"
+        android:textColor="@color/mainColor"
         android:textStyle="bold"
         />
     <EditText
@@ -42,10 +42,10 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:background="@android:color/transparent"
-        android:textColorHint="@color/darkGrey"
-        android:textColor="@color/mustardYellow"
+        android:textColor="@color/mainColor"
         android:imeOptions="actionDone"
         android:selectAllOnFocus="true"
+        android:imeActionLabel="다음"
         />
     <TextView
         android:layout_width="wrap_content"
@@ -53,7 +53,7 @@
         android:text=":"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
-        android:textColor="@color/mustardYellow"
+        android:textColor="@color/mainColor"
         android:textStyle="bold"
         />
     <EditText
@@ -66,10 +66,10 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:background="@android:color/transparent"
-        android:textColorHint="@color/darkGrey"
-        android:textColor="@color/mustardYellow"
+        android:textColor="@color/mainColor"
         android:imeOptions="actionDone"
         android:selectAllOnFocus="true"
+        android:imeActionLabel="다음"
         />
     <TextView
         android:layout_width="wrap_content"
@@ -77,7 +77,7 @@
         android:text=","
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
-        android:textColor="@color/mustardYellow"
+        android:textColor="@color/mainColor"
         android:textStyle="bold"
         />
     <EditText
@@ -90,10 +90,10 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:background="@android:color/transparent"
-        android:textColorHint="@color/darkGrey"
-        android:textColor="@color/mustardYellow"
+        android:textColor="@color/mainColor"
         android:imeOptions="actionDone"
         android:selectAllOnFocus="true"
+        android:imeActionLabel="완료"
         />
 
 </LinearLayout>

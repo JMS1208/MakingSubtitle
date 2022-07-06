@@ -7,11 +7,22 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="vividYellow">#FFE459</color>
-    <color name="mustardYellow">#D35908</color>
+    <color name="subColor2">#B20600</color>
+    <color name="mainColor">#DA1212</color>
 
-    <color name="vividOrange">#FD9F28</color>
+    <color name="subColor">#E43A15</color>
     <color name="lightGrey">#9F9F9F</color>
-    <color name="lightOrange">#FF8964</color>
+    <color name="brightGrey">#9F9F9F</color>
+    <color name="thirdColor">#E65245</color>
     <color name="darkGrey">#424242</color>
+
+    <color name="playButton">#B20600</color>
+    <color name="stroke_red">#DA1212</color>
+    <color name="icon_red">#DA1212</color>
+    <color name="bg_grey">#EEEEEE</color>
+    <color name="bg_toolbar">#FFFFFFFF</color>
+    <color name="status_bar">#B20600</color>
+    <color name="pressed_color">#EF9F9F</color>
+    <color name="text_grey">#2B2B2B</color>
+    <color name="always_white">#E8E8E8</color>
 </resources>

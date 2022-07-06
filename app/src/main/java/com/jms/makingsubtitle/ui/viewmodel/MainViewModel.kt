@@ -1,7 +1,11 @@
 package com.jms.makingsubtitle.ui.viewmodel
 
 import android.app.Application
+import android.content.ContentUris
+import android.content.Context
 import android.database.Cursor
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
 import android.provider.OpenableColumns
@@ -14,14 +18,7 @@ import com.jms.makingsubtitle.data.model.TimeLine
 import com.jms.makingsubtitle.data.model.TimeLines
 import com.jms.makingsubtitle.data.model.VideoTime
 import com.jms.makingsubtitle.repository.MainRepository
-import com.jms.makingsubtitle.util.Contants.LAST_LINE_NUM
-import com.jms.makingsubtitle.util.Contants.MOVE_DIRECTION_NEXT
-import com.jms.makingsubtitle.util.Contants.MOVE_DIRECTION_PREV
-import com.jms.makingsubtitle.util.Contants.convertLineNumToPage
-import com.jms.makingsubtitle.util.Contants.getLastLineNum
-import com.jms.makingsubtitle.util.SingleLiveEvent
-import fr.noop.subtitle.base.BaseSubtitleCue
-import fr.noop.subtitle.model.SubtitleCue
+
 import fr.noop.subtitle.srt.SrtObject
 import fr.noop.subtitle.srt.SrtParser
 
@@ -43,17 +40,8 @@ class MainViewModel(
 
     // Room
 
-    val subtitleFileList: StateFlow<List<SubtitleFile>> =
-        mainRepository.getSubtitleFileList().stateIn(
-            viewModelScope, SharingStarted.WhileSubscribed(5000),
-            listOf()
-        )
 
-
-
-
-
-
+    val allSubtitleList: LiveData<List<SubtitleFile>> = mainRepository.getAllSubtitleFileList()
 
     fun insertSubtitleFile(subtitleFile: SubtitleFile) = viewModelScope.launch(Dispatchers.IO) {
         mainRepository.insertSubtitleFile(subtitleFile)
@@ -64,9 +52,14 @@ class MainViewModel(
         mainRepository.deleteAllSubtitleFiles()
     }
 
+    fun deleteSubtitleFileByUUID(uuid: UUID) = viewModelScope.launch(Dispatchers.IO) {
+        mainRepository.deleteSubtitleFileByUUID(uuid)
+    }
+
     fun updateSubtitleFile(subtitleFile: SubtitleFile) = viewModelScope.launch(Dispatchers.IO) {
         subtitleFile.lastUpdate = Date()
         mainRepository.updateSubtitleFile(subtitleFile)
+
     }
 
 
@@ -77,154 +70,16 @@ class MainViewModel(
 
     fun setVideoUri(uri: Uri?) {
         _videoUri.postValue(uri)
-    }
-
-    private var _stopPosition: MutableLiveData<Long> = MutableLiveData(0)
-    val stopPosition: LiveData<Long> get() = _stopPosition
-
-    fun setStopPosition(stopPosition: Long) {
-        _stopPosition.postValue(stopPosition)
-    }
-
-
-
-
-
-
-
-
-
-    fun getSubtitleFileByUUID(uuid: UUID): SubtitleFile {
-        return mainRepository.getSubtitleFileByUUID(uuid)
-    }
-
-
-    //여기에 옵저버 달아서 씀
-    private var _loadedSubtitleFile: MutableLiveData<SubtitleFile> = MutableLiveData()
-    val loadedSubtitleFile: MutableLiveData<SubtitleFile> get() = _loadedSubtitleFile
-
-
-
-    val currentList: MutableLiveData<MutableList<TimeLine>> = MutableLiveData()
-
-
-
-
-
-
-
-    fun setupCurrentList(page: Int) {
-         val subtitleFile: SubtitleFile? = loadedSubtitleFile.value
-        subtitleFile?.let {
-            val contents = subtitleFile.contents
-            contents.let {
-                val timeLines = contents.timeLines
-                currentList.postValue(timeLines.filter{ convertLineNumToPage(it.lineNum) == page  }.toMutableList())
-
-            }
-
-        }
-    }
-
-    fun setupSubtitleFile(subtitleFile: SubtitleFile) {
-        _loadedSubtitleFile.postValue(subtitleFile)
-    }
-
-    fun deleteTimeLine(lineNum: Int) = viewModelScope.launch(Dispatchers.Default) {
-        val subtitleFile = loadedSubtitleFile.value
-        subtitleFile?.let {
-            val lastLineNum: Int = getLastLineNum(subtitleFile.contents)
-            Log.d("TAG","0: $lineNum")
-            Log.d("TAG","1: $lastLineNum")
-            val page = if(lastLineNum == lineNum) { //마지막애 지우는 경우
-                convertLineNumToPage(lineNum-1)
-            } else {
-                convertLineNumToPage(lineNum)
-            }
-            Log.d("TAG","2: $page")
-
-            subtitleFile.contents.let { contents->
-                contents.timeLines.asSequence().filter{ it.lineNum >= lineNum }.map{ it.lineNum-- }.toMutableList()
-                contents.timeLines.removeAt(lineNum - 1 )
-
-            }
-
-            withContext(Dispatchers.IO) {
-                updateSubtitleFile(subtitleFile)
-                //setupSubtitleFile(subtitleFile)
-                setupCurrentList(page)
-            }
-
-
-        }
-
 
     }
 
-    fun addTimeLine(timeLine: TimeLine) = viewModelScope.launch(Dispatchers.Default) {
-        val lineNum = timeLine.lineNum
-        val subtitleFile = loadedSubtitleFile.value
-        subtitleFile?.let {
-            subtitleFile.contents.let { contents->
-                if(lineNum == LAST_LINE_NUM) {
-                    contents.timeLines.add(TimeLine(lineNum = contents.timeLines.lastIndex + 2))
-                } else {
-                    if( lineNum > contents.timeLines.lastIndex + 1) {
-                        // 훨씬 크면
-                        contents.timeLines.add(TimeLine(lineNum = contents.timeLines.lastIndex + 2))
-                    } else {
-                        contents.timeLines.asSequence().filter{ it.lineNum >= lineNum }.map{ it.lineNum++ }.toMutableList()
-                        contents.timeLines.add(lineNum, timeLine.apply{ this.lineNum++ })
-
-                    }
-                    //if(마지막보다 크거나 작은 경우)
-                }
-
-                withContext(Dispatchers.IO) {
-                    updateSubtitleFile(subtitleFile)
-                    //setupSubtitleFile(subtitleFile)
-                }
-
-                val tmpLineNum: Int = if(lineNum == LAST_LINE_NUM) subtitleFile.contents.timeLines.last().lineNum else lineNum
-                val page: Int = convertLineNumToPage(tmpLineNum)
-                setupCurrentList(page)
 
 
-            }
-        }
-    }
-
-    fun addTimeLine(lineNum: Int) = viewModelScope.launch(Dispatchers.Default) {
-        val subtitleFile = loadedSubtitleFile.value
-        subtitleFile?.let {
-            subtitleFile.contents.let { contents->
-                if(lineNum == LAST_LINE_NUM) {
-                    contents.timeLines.add(TimeLine(lineNum = contents.timeLines.lastIndex + 2))
-                } else {
-                    if( lineNum > contents.timeLines.lastIndex + 1) {
-                        // 훨씬 크면
-                        contents.timeLines.add(TimeLine(lineNum = contents.timeLines.lastIndex + 2))
-                    } else {
-                        contents.timeLines.asSequence().filter{ it.lineNum >= lineNum }.map{ it.lineNum++ }.toMutableList()
-                        contents.timeLines.add(lineNum-1, TimeLine(lineNum = lineNum))
-
-                    }
-                    //if(마지막보다 크거나 작은 경우)
-                }
-
-                withContext(Dispatchers.IO) {
-                    updateSubtitleFile(subtitleFile)
-                    //setupSubtitleFile(subtitleFile)
-                }
-
-                val tmpLineNum: Int = if(lineNum == LAST_LINE_NUM) subtitleFile.contents.timeLines.last().lineNum else lineNum
-                val page: Int = convertLineNumToPage(tmpLineNum)
-                setupCurrentList(page)
 
 
-            }
-        }
-    }
+    fun getTimeLinesByUUID(uuid: UUID): LiveData<TimeLines>
+        = mainRepository.getTimeLinesByUUID(uuid)
+
 
 
     private fun makeSubtitleFileByUri(
@@ -248,11 +103,14 @@ class MainViewModel(
 
         cursor?.use {
             if (cursor.moveToFirst()) {
-                val index =
+                val index_fileName =
                 //cursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns.DISPLAY_NAME)
                     //cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.MEDIA_TYPE_SUBTITLE)
                     it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-                fileName = cursor.getString(index).removeSuffix(".srt")
+
+                fileName = cursor.getString(index_fileName).removeSuffix(".srt")
+
+
             }
         }
 
@@ -286,7 +144,7 @@ class MainViewModel(
                     _cue.endTime.second,
                     _cue.endTime.millisecond
                 )
-                val timeLine = TimeLine(_cue.id.toInt(), _cue.text, startTime, endTime)
+                val timeLine = TimeLine(_cue.text, startTime, endTime)
                 timeLines.add(timeLine)
             }
 
@@ -299,9 +157,6 @@ class MainViewModel(
             }
             contents = TimeLines(timeLines)
 
-            setupSubtitleFile(this)
-            setupCurrentList(1)
-
         }
 
 
@@ -310,7 +165,6 @@ class MainViewModel(
 
         //만들 때 디비 저장도 같이
     }
-
 
 
     fun loadSubtitleFileUri(uri: Uri?, subtitleFile: SubtitleFile, charsetName: String) {
@@ -328,9 +182,21 @@ class MainViewModel(
     }
 
 
+    //DataStore
+    fun saveThemeMode(value: String) = viewModelScope.launch(Dispatchers.IO) {
+        mainRepository.saveThemeMode(value)
+    }
 
+    suspend fun getThemeMode() = withContext(Dispatchers.IO) {
+        mainRepository.getThemeMode().first()
+    }
 
+    fun saveLeafTimeMode(value: String) = viewModelScope.launch(Dispatchers.IO) {
+        mainRepository.saveLeafTimeMode(value)
+    }
 
-
+    suspend fun getLeafTimeMode() = withContext(Dispatchers.IO) {
+        mainRepository.getLeafTimeMode().first()
+    }
 
 }

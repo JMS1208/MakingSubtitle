@@ -1,19 +1,13 @@
 package com.jms.makingsubtitle.data.room
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.net.Uri
 import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter
-import com.google.common.reflect.TypeToken
-import com.google.gson.Gson
 import com.jms.makingsubtitle.data.model.TimeLine
 import com.jms.makingsubtitle.data.model.TimeLines
 import com.jms.makingsubtitle.data.model.VideoTime
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
-import com.squareup.moshi.Types
-import java.io.ByteArrayOutputStream
-import java.lang.reflect.Type
 import java.util.*
 
 @ProvidedTypeConverter
@@ -43,40 +37,6 @@ class SubtitleFileTypeConverter(
         return UUID.fromString(uuid)
     }
 
-    @TypeConverter
-    fun toByteArray(bitmap: Bitmap?): ByteArray? {
-        bitmap?.let {
-            val os = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, os)
-            return os.toByteArray()
-        } ?: return null
-
-    }
-
-    @TypeConverter
-    fun toBitmap(bytes: ByteArray?): Bitmap? {
-        bytes?.let {
-            return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-        } ?: return null
-
-    }
-
-//    @TypeConverter
-//    fun fromString(contents: String): MutableList<TimeLine>? {
-////        val listType: Type = object : TypeToken<MutableList<TimeLine>>() {}.type
-////        return Gson().fromJson(contents, listType)
-//        val listType = Types.newParameterizedType(MutableList::class.java,TimeLine::class.java)
-//        val adapter : JsonAdapter<MutableList<TimeLine>> = moshi.adapter(listType)
-//        return adapter.fromJson(contents)
-//    }
-//
-//    @TypeConverter
-//    fun listToString(timeLines: MutableList<TimeLine>?): String {
-//        //return Gson().toJson(timeLines)
-//        val listType = Types.newParameterizedType(MutableList::class.java, TimeLine::class.java)
-//        val adapter: JsonAdapter<MutableList<TimeLine>> = moshi.adapter(listType)
-//        return adapter.toJson(timeLines)
-//    }
 
     @TypeConverter
     fun toTimeLines(value: String): TimeLines? {
@@ -112,10 +72,16 @@ class SubtitleFileTypeConverter(
         return adapter.toJson(type)
     }
 
+    @TypeConverter
+    fun toUri(value: String?): Uri? {
+        return if (value == null) null else Uri.parse(value)
+    }
+
+    @TypeConverter
+    fun fromUri(uri: Uri?): String? {
+        return uri?.toString()
+    }
 
 
-
-
-    //타임라인의 컨버터도 추가해야할듯
 
 }

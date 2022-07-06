@@ -3,14 +3,39 @@
     <style name="Theme.MakingSubTitle" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/white</item>
-        <item name="colorPrimaryVariant">@color/vividYellow</item>
+        <item name="colorPrimaryVariant">@color/status_bar</item>
         <item name="colorOnPrimary">@color/lightGrey</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/vividOrange</item>
-        <item name="colorSecondaryVariant">@color/vividYellow</item>
+        <item name="colorSecondary">@color/subColor</item>
+        <item name="colorSecondaryVariant">@color/subColor2</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="android:actionOverflowButtonStyle">@style/AppTheme.OverFlow</item>
+    </style>
+    <style name="AppTheme.OverFlow" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:tint">@color/stroke_red</item>
+        <item name="colorControlNormal">@color/stroke_red</item>
+    </style>
+
+    <style name="MyRadioButton" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/brightGrey</item>
+        <item name="colorControlActivated">@color/mainColor</item>
+    </style>
+
+    <style name="CustomAlertDialog">
+
+        <!-- 꽉 채운 화면에 배경 없이 (custom view 영역만 보일 것이다.) -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowMinWidthMajor">100%</item>
+        <item name="android:windowMinWidthMinor">100%</item>
+        <!-- Dim 처리 -->
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:colorBackground">?attr/colorBackgroundFloating</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+
+        <!-- Dialog 가 센터에 나오도록 하자. -->
+        <item name="android:windowIsFloating">true</item>
     </style>
 </resources>

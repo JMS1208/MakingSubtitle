@@ -2,9 +2,6 @@ package com.jms.makingsubtitle.data.room
 
 import android.content.Context
 import androidx.room.*
-import androidx.room.migration.AutoMigrationSpec
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.jms.makingsubtitle.data.model.SubtitleFile
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory

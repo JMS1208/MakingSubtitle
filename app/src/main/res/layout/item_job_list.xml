@@ -1,124 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
-    android:background="@drawable/stroke_bg_orange"
-    android:padding="10dp"
-    >
+    android:layout_margin="5dp"
+    android:background="@drawable/bg_item"
+    android:elevation="1dp"
+    android:padding="10dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/thumbnail_iv"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:adjustViewBounds="true"
+        android:background="@drawable/bg_radius"
+        android:scaleType="fitXY"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_no_thumb" />
+
+
+    <TextView
+        android:id="@+id/jobName"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
-        <ImageView
-            android:layout_margin="10dp"
-            android:id="@+id/thumbnail_iv"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center_horizontal"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            app:srcCompat="@drawable/ic_no_thumbnail" />
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="5dp"
+        android:text="@string/jobName"
+        android:textColor="@color/lightGrey"
+        android:textSize="20sp"
+        android:textStyle="bold"
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:background="@color/lightGrey"
-            />
+        app:layout_constraintStart_toEndOf="@id/thumbnail_iv"
+        app:layout_constraintTop_toTopOf="@id/thumbnail_iv" />
+
+    <TextView
+        android:id="@+id/job_Name_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintStart_toEndOf="@id/jobName"
+        app:layout_constraintTop_toTopOf="@id/thumbnail_iv"
+
+        tools:text="투모로우(Tomorrow)" />
+    <TextView
+        android:id="@+id/fileName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/fileName"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="5dp"
+        android:textColor="@color/lightGrey"
+        app:layout_constraintStart_toEndOf="@id/thumbnail_iv"
+        app:layout_constraintBottom_toTopOf="@id/bornDate"
+        />
+    <TextView
+        android:id="@+id/file_Name_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text= "Tomorrow.srt"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="5dp"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@id/fileName"
+        app:layout_constraintBottom_toTopOf="@id/bornDate"
+        />
+    <TextView
+        android:id="@+id/bornDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/bornDate"
+        android:textStyle="bold"
+        android:textColor="@color/lightGrey"
+        app:layout_constraintStart_toEndOf="@id/thumbnail_iv"
+        app:layout_constraintBottom_toTopOf="@id/lastUpdate"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="5dp"
+        android:textSize="14sp"
+        />
+    <TextView
+        android:id="@+id/job_bornDate_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/bornDate"
+        app:layout_constraintBottom_toTopOf="@id/lastUpdate"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="5dp"
+        android:textSize="14sp"
+        tools:text= "2022.06.21"/>
+    <TextView
+        android:id="@+id/lastUpdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/lastUpdate"
+        android:textStyle="bold"
+        android:textColor="@color/lightGrey"
+        app:layout_constraintStart_toEndOf="@id/thumbnail_iv"
+        app:layout_constraintBottom_toBottomOf="@id/thumbnail_iv"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="5dp"
+        android:textSize="14sp"
+        />
+    <TextView
+        android:id="@+id/job_lastDate_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/thumbnail_iv"
+        app:layout_constraintStart_toEndOf="@id/lastUpdate"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="5dp"
+        tools:text= "2022.06.21"
+        android:textSize="14sp"
+        />
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="5dp"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/jobName"
-                android:textStyle="bold"
-                android:textColor="@color/lightGrey"
-                android:layout_marginEnd="10dp"
-                />
-            <TextView
-                android:id="@+id/job_Name_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text= "투모로우(Tomorrow)"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="5dp"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/fileName"
-                android:textStyle="bold"
-                android:textColor="@color/lightGrey"
-                android:layout_marginEnd="10dp"
-                />
-            <TextView
-                android:id="@+id/file_Name_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text= "Tomorrow.srt"
-                />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="5dp"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/bornDate"
-                android:textStyle="bold"
-                android:textColor="@color/lightGrey"
-                android:layout_marginEnd="10dp"
-                />
-            <TextView
-                android:id="@+id/job_bornDate_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text= "2022.06.21"
-                />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="5dp"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/lastUpdate"
-                android:textStyle="bold"
-                android:textColor="@color/lightGrey"
-                android:layout_marginEnd="10dp"
-                />
-            <TextView
-                android:id="@+id/job_lastDate_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text= "2022.06.21"
-                />
-        </LinearLayout>
-
-    </LinearLayout>
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

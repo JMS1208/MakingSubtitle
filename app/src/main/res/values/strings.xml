@@ -1,11 +1,27 @@
 <resources>
     <string name="app_name">MakingSubTitle</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="menu_search_text">작업검색</string>
     <string name="menu_add_text">작업추가</string>
     <string name="jobName">작업명</string>
-    <string name="bornDate">최초 생성일자</string>
+    <string name="bornDate">작업 생성일자</string>
     <string name="lastUpdate">마지막 수정일자</string>
-    <string name="fileName">저장될 파일명</string>
+    <string name="fileName">저장할 파일명</string>
+    <string name="ok">확인</string>
+    <string name="setupFileName">파일명_미지정</string>
+    <string name="searchJobName">작업명으로 검색</string>
+    <string name="updated">업데이트 완료</string>
+    <string name="deleted">삭제 완료</string>
+    <string name="cancellation">취소</string>
+    <string name="copied">복사 되었습니다</string>
+    <string name="nothingCopied">복사한 내용이 없습니다</string>
+    <string name="added">추가되었습니다</string>
+    <string name="requestLink">링크를 입력해주세요</string>
+    <string name="thumbnailBaseUrl">https://img.youtube.com/vi/%s/default.jpg</string>
+    <string name="getVideoFailed">영상을 가져오는 데 실패하였습니다</string>
+    <string name="SettingsTimeLeaf">동영상 건너뛰기 시간</string>
+    <string name="SettingsTheme">테마</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="doNotShowMe">다시 보지 않기</string>
+    <string name="close">닫기</string>
 </resources>
