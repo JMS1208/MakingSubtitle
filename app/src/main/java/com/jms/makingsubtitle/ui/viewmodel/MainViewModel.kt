@@ -199,4 +199,20 @@ class MainViewModel(
         mainRepository.getLeafTimeMode().first()
     }
 
+    fun saveShowOptions(value: String) = viewModelScope.launch(Dispatchers.IO) {
+        mainRepository.saveShowOptions(value)
+    }
+
+    suspend fun getShowOptions() = withContext(Dispatchers.IO) {
+        mainRepository.getShowOptions().first()
+    }
+
+    fun saveVibrationOptions(value: String) = viewModelScope.launch(Dispatchers.IO) {
+        mainRepository.saveVibrationOptions(value)
+    }
+
+    suspend fun getVibrationOptions() = withContext(Dispatchers.IO) {
+        mainRepository.getVibrationOptions().first()
+    }
+
 }

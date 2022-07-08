@@ -1,9 +1,14 @@
 package com.jms.makingsubtitle.util
 
 import android.content.Context
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
+import com.google.android.exoplayer2.util.Util
 import com.jms.makingsubtitle.data.model.TimeLine
 import com.jms.makingsubtitle.data.model.TimeLines
 
@@ -27,6 +32,8 @@ object Contants {
     fun MakeToast(context: Context, text : String) {
             Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     }
+
+
 
 
 

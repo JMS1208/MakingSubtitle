@@ -13,7 +13,11 @@ import com.jms.makingsubtitle.data.room.SubtitleFileDatabase
 import com.jms.makingsubtitle.repository.MainRepository.PreferencesKeys.LEAF_TIME_MODE
 import com.jms.makingsubtitle.repository.MainRepository.PreferencesKeys.THEME_MODE
 import com.jms.makingsubtitle.data.datastore.LeafTimeMode
+import com.jms.makingsubtitle.data.datastore.ShowOptions
 import com.jms.makingsubtitle.data.datastore.ThemeMode
+import com.jms.makingsubtitle.data.datastore.VibrationOptions
+import com.jms.makingsubtitle.repository.MainRepository.PreferencesKeys.SHOW_OPTION
+import com.jms.makingsubtitle.repository.MainRepository.PreferencesKeys.VIBRATION_OPTION
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -65,7 +69,50 @@ class MainRepository(
     private object PreferencesKeys {
         val THEME_MODE = stringPreferencesKey("theme_mode")
         val LEAF_TIME_MODE = stringPreferencesKey("leaf_time_mode")
+        val SHOW_OPTION = stringPreferencesKey("show_options")
+        val VIBRATION_OPTION = stringPreferencesKey("vibration_options")
     }
+
+    suspend fun saveVibrationOptions(options: String) {
+        dataStore.edit { prefs->
+            prefs[VIBRATION_OPTION] = options
+        }
+    }
+
+    suspend fun getVibrationOptions(): Flow<String>{
+        return dataStore.data
+            .catch { exception ->
+                if(exception is IOException) {
+                    exception.printStackTrace()
+                    emit(emptyPreferences())
+                } else {
+                    throw exception
+                }
+            }.map { prefs->
+                prefs[VIBRATION_OPTION] ?: VibrationOptions.ACTIVATE.value
+            }
+    }
+
+    suspend fun saveShowOptions(options: String) {
+        dataStore.edit { prefs->
+            prefs[SHOW_OPTION] = options
+        }
+    }
+
+    suspend fun getShowOptions(): Flow<String> {
+        return dataStore.data
+            .catch { exception ->
+                if(exception is IOException) {
+                    exception.printStackTrace()
+                    emit(emptyPreferences())
+                } else {
+                    throw exception
+                }
+            }.map { prefs->
+                prefs[SHOW_OPTION] ?: ShowOptions.SHOW_AGAIN.value
+            }
+    }
+
     suspend fun saveLeafTimeMode(mode: String) {
         dataStore.edit { prefs->
             prefs[LEAF_TIME_MODE] = mode

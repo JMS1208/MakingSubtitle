@@ -1,15 +1,19 @@
 package com.jms.makingsubtitle.ui.view.workspace
 
+import android.animation.ArgbEvaluator
+import android.animation.ValueAnimator
 import android.app.Activity
+import android.content.Context
+import android.content.Context.VIBRATOR_SERVICE
 import android.content.Intent
+import android.graphics.PorterDuff
 import android.net.Uri
-import android.os.Build
-import android.os.Bundle
-import android.os.Parcelable
+import android.os.*
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.*
+import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
@@ -41,6 +45,7 @@ import com.jms.makingsubtitle.util.Contants.YOUTUBE_BASE_URL
 import com.jms.makingsubtitle.util.Contants.YOUTUBE_BASE_URL_MOBILE
 
 import com.jms.makingsubtitle.data.datastore.LeafTimeMode
+import com.jms.makingsubtitle.data.datastore.VibrationOptions
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerCallback
@@ -100,12 +105,13 @@ class WorkSpaceFragment : Fragment() {
             release()
         }
 
+
         _binding = null
     }
 
     override fun onPause() { // 이때 플레이어 멈추고 재생시간 저장
         super.onPause()
-
+        viewModel.updateSubtitleFile(args.subtitleJob)
         if (Util.SDK_INT < 24) {
             when (tracker.state) { // 유튜브 재생시간 저장
                 PlayerConstants.PlayerState.PAUSED,
@@ -119,6 +125,7 @@ class WorkSpaceFragment : Fragment() {
             binding.exoVv.player?.let { // 엑소 재생시간 저장
                 playbackPosition = it.currentPosition
             }
+
         }
     }
 
@@ -138,6 +145,7 @@ class WorkSpaceFragment : Fragment() {
             binding.exoVv.player?.let { // 엑소 재생시간 저장
                 playbackPosition = it.currentPosition
             }
+
         }
     }
 
@@ -162,7 +170,6 @@ class WorkSpaceFragment : Fragment() {
         super.onResume()
         if (Util.SDK_INT < 24 || exoplayer == null) { // 이때 seekTo로 저장된 position 으로 세팅
             initializeExoPlayer()
-
 
             binding.pvYoutube.getYouTubePlayerWhenReady(object : YouTubePlayerCallback {
                 override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
@@ -248,6 +255,34 @@ class WorkSpaceFragment : Fragment() {
             this.release()
         }
         exoplayer = null
+
+    }
+
+    private fun generateVibration() = lifecycleScope.launch {
+        when (viewModel.getVibrationOptions()) {
+            VibrationOptions.ACTIVATE.value -> {
+                val vib = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    val vibratorManager =
+                        activity?.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+                    vibratorManager.defaultVibrator
+                } else {
+                    @Suppress("DEPRECATION")
+                    activity?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                }
+                if (Util.SDK_INT >= 26) {
+                    vib.vibrate(
+                        VibrationEffect.createOneShot(
+                            100,
+                            30
+                        )
+                    )
+                } else {
+                    @Suppress("DEPRECATION")
+                    vib.vibrate(100)
+                }
+            }
+            else -> return@launch
+        }
 
     }
 
@@ -341,9 +376,10 @@ class WorkSpaceFragment : Fragment() {
                 override fun onTextChanged(charSequence: CharSequence?, p1: Int, p2: Int, p3: Int) {
                     charSequence?.let {
 
-                        val timeLine = oldTimeLineList[bindingAdapterPosition]
+                        val timeLine = oldTimeLineList[absoluteAdapterPosition]
                         timeLine.lineContent = it.toString()
-                        viewModel.updateSubtitleFile(args.subtitleJob)
+                        args.subtitleJob.contents.timeLines[absoluteAdapterPosition] = timeLine
+
                     }
                 }
 
@@ -354,9 +390,15 @@ class WorkSpaceFragment : Fragment() {
 
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                     val startTimeET = itemBinding.startTimeEt
-                    val timeLine = oldTimeLineList[bindingAdapterPosition]
-                    timeLine.startTime = startTimeET.getVideoTime()
-                    viewModel.updateSubtitleFile(args.subtitleJob)
+                    val timeLine = oldTimeLineList[absoluteAdapterPosition]
+
+                    if (timeLine.startTime != startTimeET.getVideoTime()) {
+                        timeLine.startTime = startTimeET.getVideoTime()
+                        args.subtitleJob.contents.timeLines[absoluteAdapterPosition] = timeLine
+
+                    }
+
+
                 }
 
                 override fun afterTextChanged(p0: Editable?) {}
@@ -366,13 +408,22 @@ class WorkSpaceFragment : Fragment() {
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
                     val endTimeET = itemBinding.endTimeEt
-                    val timeLine = oldTimeLineList[bindingAdapterPosition]
-                    timeLine.endTime = endTimeET.getVideoTime()
-                    viewModel.updateSubtitleFile(args.subtitleJob)
+                    val timeLine = oldTimeLineList[absoluteAdapterPosition]
+
+                    if (timeLine.endTime != endTimeET.getVideoTime()) {
+                        timeLine.endTime = endTimeET.getVideoTime()
+                        args.subtitleJob.contents.timeLines[absoluteAdapterPosition] = timeLine
+
+                    }
+
                 }
 
-                override fun afterTextChanged(p0: Editable?) {}
+                override fun afterTextChanged(p0: Editable?) {
+
+
+                }
 
             }
 
@@ -413,7 +464,7 @@ class WorkSpaceFragment : Fragment() {
                                     copiedTimeLine?.let {
                                         args.subtitleJob.contents.timeLines[absoluteAdapterPosition] =
                                             it
-                                        viewModel.updateSubtitleFile(args.subtitleJob)
+                                        //viewModel.updateSubtitleFile(args.subtitleJob)
 
                                     } ?: MakeToast(
                                         requireContext(),
@@ -422,10 +473,6 @@ class WorkSpaceFragment : Fragment() {
                                     true
                                 }
                                 R.id.menu_item_add_upper_line -> {
-                                    Log.d(
-                                        "TAG",
-                                        "위에꺼 포지션: ${this@ViewHolder.absoluteAdapterPosition}"
-                                    )
 
                                     addTimeLine(this@ViewHolder.absoluteAdapterPosition, TimeLine())
 
@@ -434,10 +481,6 @@ class WorkSpaceFragment : Fragment() {
                                 }
 
                                 R.id.menu_item_add_lower_line -> {
-                                    Log.d(
-                                        "TAG",
-                                        "아래꺼 포지션: ${this@ViewHolder.absoluteAdapterPosition + 1}"
-                                    )
                                     addTimeLine(
                                         this@ViewHolder.absoluteAdapterPosition + 1,
                                         TimeLine()
@@ -476,10 +519,20 @@ class WorkSpaceFragment : Fragment() {
 
                     startTimeAutoBtn.apply {
                         setOnClickListener {
+
+                            generateVibration()
+
+                            val anim = AnimationUtils.loadAnimation(
+                                requireContext(),
+                                R.anim.btn_extensions
+                            )
+                            startTimeAutoBtn.startAnimation(anim)
+
                             binding.exoVv.player?.let {
                                 args.subtitleJob.contents.timeLines[absoluteAdapterPosition].startTime =
                                     VideoTime(it.currentPosition)
-                                viewModel.updateSubtitleFile(args.subtitleJob)
+                                startTimeEt.setVideoTime(VideoTime(it.currentPosition))
+                                //viewModel.updateSubtitleFile(args.subtitleJob)
                             }
                             when (tracker.state) {
                                 PlayerConstants.PlayerState.PAUSED,
@@ -487,8 +540,8 @@ class WorkSpaceFragment : Fragment() {
                                     val startTime = (tracker.currentSecond * 1000).toLong()
                                     args.subtitleJob.contents.timeLines[absoluteAdapterPosition].startTime =
                                         VideoTime(startTime)
-
-                                    viewModel.updateSubtitleFile(args.subtitleJob)
+                                    startTimeEt.setVideoTime(VideoTime(startTime))
+                                    //viewModel.updateSubtitleFile(args.subtitleJob)
                                 }
                                 else -> return@setOnClickListener
                             }
@@ -498,11 +551,21 @@ class WorkSpaceFragment : Fragment() {
 
                     endTimeAutoBtn.apply {
                         setOnClickListener {
+                            generateVibration()
+                            val anim = AnimationUtils.loadAnimation(
+                                requireContext(),
+                                R.anim.btn_extensions
+                            )
+
+                            endTimeAutoBtn.startAnimation(anim)
+
+
+
                             binding.exoVv.player?.let {
                                 args.subtitleJob.contents.timeLines[absoluteAdapterPosition].endTime =
                                     VideoTime(it.currentPosition)
-
-                                viewModel.updateSubtitleFile(args.subtitleJob)
+                                endTimeEt.setVideoTime(VideoTime(it.currentPosition))
+                                //viewModel.updateSubtitleFile(args.subtitleJob)
                             }
                             when (tracker.state) {
                                 PlayerConstants.PlayerState.PAUSED,
@@ -511,8 +574,8 @@ class WorkSpaceFragment : Fragment() {
 
                                     args.subtitleJob.contents.timeLines[absoluteAdapterPosition].endTime =
                                         VideoTime(endTime)
-
-                                    viewModel.updateSubtitleFile(args.subtitleJob)
+                                    endTimeEt.setVideoTime(VideoTime(endTime))
+                                    //viewModel.updateSubtitleFile(args.subtitleJob)
                                 }
                                 else -> return@setOnClickListener
                             }
@@ -601,8 +664,9 @@ class WorkSpaceFragment : Fragment() {
 
         binding.toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.menu_item_settings_work_space-> {
-                    val action = WorkSpaceFragmentDirections.actionFragmentWorkSpaceToSettingsFragment()
+                R.id.menu_item_settings_work_space -> {
+                    val action =
+                        WorkSpaceFragmentDirections.actionFragmentWorkSpaceToSettingsFragment()
                     findNavController().navigate(action)
 
                     true

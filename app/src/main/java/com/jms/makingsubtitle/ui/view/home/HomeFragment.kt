@@ -72,7 +72,7 @@ class HomeFragment : Fragment() {
                             .into(thumbnailIv)
 
                     } ?: Glide.with(requireContext())
-                        .load(R.drawable.ic_no_thumb)
+                        .load(R.drawable.thumbnails)
                         .into(thumbnailIv)
 
                 }
@@ -245,9 +245,7 @@ class HomeFragment : Fragment() {
         binding.jobListRv.layoutManager = LinearLayoutManager(requireContext())
 
 
-        InstructionFragment().show(
-            childFragmentManager, "instruction_fragment"
-        )
+
 
 
 

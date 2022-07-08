@@ -8,9 +8,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import com.jms.makingsubtitle.data.datastore.ShowOptions
 import com.jms.makingsubtitle.data.room.SubtitleFileDatabase
 import com.jms.makingsubtitle.databinding.ActivityMainBinding
 import com.jms.makingsubtitle.repository.MainRepository
+import com.jms.makingsubtitle.ui.view.instruction.InstructionFragment
 import com.jms.makingsubtitle.ui.viewmodel.MainViewModel
 import com.jms.makingsubtitle.ui.viewmodel.MainViewModelFactory
 import com.jms.makingsubtitle.util.Contants.DATASTORE_NAME
@@ -43,6 +45,19 @@ class MainActivity : AppCompatActivity() {
             val themePref = viewModel.getThemeMode()
             ThemeHelper.applyTheme(themePref)
         }
+
+        lifecycleScope.launch {
+            when(viewModel.getShowOptions()) {
+                ShowOptions.SHOW_AGAIN.value -> {
+                    InstructionFragment().show(
+                        supportFragmentManager, "instruction_fragment"
+                    )
+                }
+                else-> return@launch
+            }
+        }
+
+
 
     }
 }

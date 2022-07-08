@@ -3,6 +3,7 @@ package com.jms.makingsubtitle.data.model
 import android.content.Context
 import android.text.TextWatcher
 import android.util.AttributeSet
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -18,15 +19,15 @@ class TimeEditText @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-): LinearLayout(context, attrs, defStyleAttr) {
+) : LinearLayout(context, attrs, defStyleAttr) {
 
     private var HH_EditText: EditText
     private var MM_EditText: EditText
     private var SS_EditText: EditText
     private var MS_EditText: EditText
 
-    init{
-        val v = View.inflate(context, R.layout.cv_time_et,this)
+    init {
+        val v = View.inflate(context, R.layout.cv_time_et, this)
         HH_EditText = v.findViewById(R.id.editText_hh)
         MM_EditText = v.findViewById(R.id.editText_mm)
         SS_EditText = v.findViewById(R.id.editText_ss)
@@ -35,40 +36,40 @@ class TimeEditText @JvmOverloads constructor(
         context.theme.obtainStyledAttributes(
             attrs,
             R.styleable.CustomEditText,
-            0,0
+            0, 0
         )
 
 
         HH_EditText.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 if (HH_EditText.text.isBlank()) {
-                    HH_EditText.setText("0")
+                    //HH_EditText.setText("0")
                 }
             }
         }
 
         MM_EditText.setOnFocusChangeListener { _, hasFocus ->
-            if(!hasFocus) {
-                setMMET()
+            if (!hasFocus) {
+                //setMMET()
             }
         }
 
         SS_EditText.setOnFocusChangeListener { _, hasFocus ->
-            if(!hasFocus){
-                setSSET()
+            if (!hasFocus) {
+                //setSSET()
             }
         }
 
         MS_EditText.setOnFocusChangeListener { _, hasFocus ->
-            if(!hasFocus) {
-                setMSET()
+            if (!hasFocus) {
+                //setMSET()
             }
 
         }
 
         HH_EditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                if(HH_EditText.text.isBlank()){
+                if (HH_EditText.text.isBlank()) {
                     HH_EditText.setText("0")
                 }
                 clearFocus()
@@ -77,15 +78,16 @@ class TimeEditText @JvmOverloads constructor(
             true
         }
         MM_EditText.setOnEditorActionListener(
-            object: TextView.OnEditorActionListener{
+            object : TextView.OnEditorActionListener {
                 override fun onEditorAction(p0: TextView?, actionId: Int, p2: KeyEvent?): Boolean {
-                    if(actionId == EditorInfo.IME_ACTION_DONE){
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
 
-                        try{
+                        try {
 
                             setMMET()
 
-                        } catch(E: Exception) { }
+                        } catch (E: Exception) {
+                        }
 
 
                     }
@@ -94,15 +96,18 @@ class TimeEditText @JvmOverloads constructor(
             }
         )
         SS_EditText.setOnEditorActionListener(
-            object: TextView.OnEditorActionListener{
+            object : TextView.OnEditorActionListener {
                 override fun onEditorAction(p0: TextView?, actionId: Int, p2: KeyEvent?): Boolean {
-                    if(actionId == EditorInfo.IME_ACTION_DONE){
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
 
-                        try{
+                        try {
 
                             setSSET()
 
-                        } catch(E: Exception) { }
+                        } catch (E: Exception) {
+                            Log.d("TAG", "sset: ${E.message}")
+
+                        }
 
 
                     }
@@ -112,14 +117,14 @@ class TimeEditText @JvmOverloads constructor(
         )
 
         MS_EditText.setOnEditorActionListener(
-            object: TextView.OnEditorActionListener{
+            object : TextView.OnEditorActionListener {
                 override fun onEditorAction(p0: TextView?, actionId: Int, p2: KeyEvent?): Boolean {
-                    if(actionId == EditorInfo.IME_ACTION_DONE){
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
 
-                        try{
+                        try {
                             setMSET()
 
-                        } catch(E: Exception) {
+                        } catch (E: Exception) {
 
                         }
 
@@ -133,25 +138,26 @@ class TimeEditText @JvmOverloads constructor(
 
     private fun setMSET() {
         val ms_time: Int
-        val tempNum = if(MS_EditText.text.isBlank()) 0 else MS_EditText.text.toString().toInt()
+        val tempNum = if (MS_EditText.text.isBlank()) 0 else MS_EditText.text.toString().toInt()
 
         when {
-            tempNum < 0 ->{
+            tempNum < 0 -> {
                 ms_time = 0
                 MS_EditText.setText(ms_time.toString())
                 MS_EditText.setSelection(MS_EditText.text.length)
-                MakeToast(context,"숫자가 너무 작습니다")
+                MakeToast(context, "숫자가 너무 작습니다")
             }
             tempNum > 999 -> {
                 ms_time = 999
                 MS_EditText.setText(ms_time.toString())
                 MS_EditText.setSelection(MS_EditText.text.length)
-                MakeToast(context,"숫자가 너무 큽니다")
+                MakeToast(context, "숫자가 너무 큽니다")
             }
             else -> {
                 ms_time = tempNum
-                MS_EditText.setText(ms_time.toString())
-                val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                MS_EditText.setText(String.format("%03d",ms_time))
+                val inputMethodManager =
+                    context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 inputMethodManager.hideSoftInputFromWindow(MS_EditText.windowToken, 0)
                 clearFocus()
             }
@@ -160,25 +166,26 @@ class TimeEditText @JvmOverloads constructor(
     }
 
     private fun setSSET() {
+
         val ss_time: Int
-        val tempNum = if(SS_EditText.text.isBlank()) 0 else SS_EditText.text.toString().toInt()
+        val tempNum = if (SS_EditText.text.isBlank()) 0 else SS_EditText.text.toString().toInt()
 
         when {
-            tempNum < 0 ->{
+            tempNum < 0 -> {
                 ss_time = 0
                 SS_EditText.setText(ss_time.toString())
                 SS_EditText.setSelection(SS_EditText.text.length)
-                MakeToast(context,"숫자가 너무 작습니다")
+                MakeToast(context, "숫자가 너무 작습니다")
             }
             tempNum > 60 -> {
                 ss_time = 60
                 SS_EditText.setText(ss_time.toString())
                 SS_EditText.setSelection(SS_EditText.text.length)
-                MakeToast(context,"숫자가 너무 큽니다")
+                MakeToast(context, "숫자가 너무 큽니다")
             }
             else -> {
                 ss_time = tempNum
-                SS_EditText.setText(ss_time.toString())
+                SS_EditText.setText(String.format("%02d",ss_time))
                 clearFocus()
                 MS_EditText.requestFocus()
             }
@@ -189,24 +196,24 @@ class TimeEditText @JvmOverloads constructor(
 
     private fun setMMET() {
         val mm_time: Int
-        val tempNum = if(MM_EditText.text.isBlank()) 0 else MM_EditText.text.toString().toInt()
+        val tempNum = if (MM_EditText.text.isBlank()) 0 else MM_EditText.text.toString().toInt()
 
         when {
-            tempNum < 0 ->{
+            tempNum < 0 -> {
                 mm_time = 0
                 MM_EditText.setText(mm_time.toString())
                 MM_EditText.setSelection(MM_EditText.text.length)
-                MakeToast(context,"숫자가 너무 작습습니다")
+                MakeToast(context, "숫자가 너무 작습습니다")
             }
             tempNum > 60 -> {
                 mm_time = 60
                 MM_EditText.setText(mm_time.toString())
                 MM_EditText.setSelection(MM_EditText.text.length)
-               MakeToast(context,"숫자가 너무 큽니다")
+                MakeToast(context, "숫자가 너무 큽니다")
             }
             else -> {
                 mm_time = tempNum
-                MM_EditText.setText(mm_time.toString())
+                MM_EditText.setText(String.format("%02d",mm_time))
                 clearFocus()
                 SS_EditText.requestFocus()
             }
@@ -271,20 +278,20 @@ class TimeEditText @JvmOverloads constructor(
             it.toString().toInt()
         } ?: 0
 
-        return VideoTime(hh,mm,ss, ms).totalTime
+        return VideoTime(hh, mm, ss, ms).totalTime
 
     }
 
     fun getVideoTime(): VideoTime { // 비어있으면 0 null이면 0
         val hh = HH_EditText.text?.let {
-            if(it.isNotEmpty()) {
+            if (it.isNotEmpty()) {
                 it.toString().toInt()
             } else {
                 0
             }
         } ?: 0
         val mm = MM_EditText.text?.let {
-            if(it.isNotEmpty()) {
+            if (it.isNotEmpty()) {
                 it.toString().toInt()
             } else {
                 0
@@ -292,7 +299,7 @@ class TimeEditText @JvmOverloads constructor(
 
         } ?: 0
         val ss = SS_EditText.text?.let {
-            if(it.isNotEmpty()) {
+            if (it.isNotEmpty()) {
                 it.toString().toInt()
             } else {
                 0
@@ -300,14 +307,14 @@ class TimeEditText @JvmOverloads constructor(
 
         } ?: 0
         val ms = MS_EditText.text?.let {
-            if(it.isNotEmpty()) {
+            if (it.isNotEmpty()) {
                 it.toString().toInt()
             } else {
                 0
             }
         } ?: 0
 
-        return VideoTime(hh,mm,ss, ms)
+        return VideoTime(hh, mm, ss, ms)
 
     }
 
