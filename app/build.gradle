@@ -109,4 +109,11 @@ dependencies {
 
     //YoutubePlayer-OpenSource
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:11.0.1'
+
+
+    //AdMob
+    implementation 'com.google.android.gms:play-services-ads:21.0.0'
+
+    //Animation-OpenSource
+    implementation 'com.daimajia.androidanimations:library:2.4@aar'
 }

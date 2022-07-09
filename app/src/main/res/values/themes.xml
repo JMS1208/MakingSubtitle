@@ -38,4 +38,12 @@
         <!-- Dialog 가 센터에 나오도록 하자. -->
         <item name="android:windowIsFloating">true</item>
     </style>
+
+
+    <style name="AnimationPopupStyle">
+        <item name="android:windowEnterAnimation">@anim/open</item>
+        <item name="android:windowExitAnimation">@anim/close</item>
+    </style>
+
+
 </resources>

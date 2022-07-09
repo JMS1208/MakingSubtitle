@@ -1,19 +1,16 @@
 package com.jms.makingsubtitle.ui.view.workspace
 
-import android.animation.ArgbEvaluator
-import android.animation.ValueAnimator
 import android.app.Activity
 import android.content.Context
-import android.content.Context.VIBRATOR_SERVICE
 import android.content.Intent
-import android.graphics.PorterDuff
+import android.graphics.Color
+import android.graphics.Point
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.*
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.*
-import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
@@ -22,6 +19,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.*
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.util.Util
@@ -38,14 +37,13 @@ import com.jms.makingsubtitle.ui.viewmodel.MainViewModel
 import com.jms.makingsubtitle.util.Contants.LAST_LINE_NUM
 import com.jms.makingsubtitle.util.Contants.MakeToast
 import com.jms.makingsubtitle.util.Contants.REQUEST_EXPORT_FILE
-import com.jms.makingsubtitle.util.Contants.REQUEST_SUBTITLE_EUC_KR
-import com.jms.makingsubtitle.util.Contants.REQUEST_SUBTITLE_UTF_8
+import com.jms.makingsubtitle.util.Contants.REQUEST_SUBTITLE
 import com.jms.makingsubtitle.util.Contants.REQUEST_VIDEO
 import com.jms.makingsubtitle.util.Contants.YOUTUBE_BASE_URL
 import com.jms.makingsubtitle.util.Contants.YOUTUBE_BASE_URL_MOBILE
-
 import com.jms.makingsubtitle.data.datastore.LeafTimeMode
 import com.jms.makingsubtitle.data.datastore.VibrationOptions
+import com.jms.makingsubtitle.util.Contants.DOUBLE_CLICK_DELAY
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerCallback
@@ -74,8 +72,6 @@ class WorkSpaceFragment : Fragment() {
     private var youtubePlayPosition = 0F
 
     private val tracker = YouTubePlayerTracker()
-
-    private var recyclerViewState: Parcelable? = null
 
 
     private fun initializeExoPlayer() {
@@ -370,6 +366,10 @@ class WorkSpaceFragment : Fragment() {
             RecyclerView.ViewHolder(itemBinding.root) {
 
             lateinit var timeLine: TimeLine
+            var startDelay = 0L
+            var endDelay = 0L
+            var startAutoDelay = 0L
+            var endAutoDelay = 0L
 
             val lineTextWatcher = object : TextWatcher {
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -401,7 +401,9 @@ class WorkSpaceFragment : Fragment() {
 
                 }
 
-                override fun afterTextChanged(p0: Editable?) {}
+                override fun afterTextChanged(p0: Editable?) {
+
+                }
 
             }
             val endTimeWatcher = object : TextWatcher {
@@ -421,7 +423,6 @@ class WorkSpaceFragment : Fragment() {
                 }
 
                 override fun afterTextChanged(p0: Editable?) {
-
 
                 }
 
@@ -462,8 +463,14 @@ class WorkSpaceFragment : Fragment() {
                                 }
                                 R.id.menu_item_paste_line -> {
                                     copiedTimeLine?.let {
-                                        args.subtitleJob.contents.timeLines[absoluteAdapterPosition] =
-                                            it
+                                        //args.subtitleJob.contents.timeLines[absoluteAdapterPosition] = it
+                                        val viewHolder =
+                                            binding.timelinesRv.findViewHolderForAdapterPosition(
+                                                absoluteAdapterPosition
+                                            )
+
+                                        (viewHolder as ViewHolder).bind(it)
+
                                         //viewModel.updateSubtitleFile(args.subtitleJob)
 
                                     } ?: MakeToast(
@@ -511,28 +518,120 @@ class WorkSpaceFragment : Fragment() {
 
                     startTimeEt.apply {
                         setVideoTime(timeLine.startTime)
+                        if (timeLine.startTime.totalTime > timeLine.endTime.totalTime) {
+                            startTimeEt.setColor(R.color.yellow)
+                        } else {
+                            if(timeLine.startTime.totalTime == 0L) {
+                                startTimeEt.setColor(R.color.yellow)
+                            } else {
+                                startTimeEt.setColor(R.color.mainColor)
+                            }
+
+                        }
                     }
 
                     endTimeEt.apply {
                         setVideoTime(timeLine.endTime)
+                        if (timeLine.startTime.totalTime > timeLine.endTime.totalTime) {
+                            endTimeEt.setColor(R.color.yellow)
+                        } else {
+                            if(timeLine.endTime.totalTime == 0L) {
+                                endTimeEt.setColor(R.color.yellow)
+                            } else {
+                                endTimeEt.setColor(R.color.mainColor)
+                            }
+                        }
+                    }
+
+                    tvStart.apply {
+                        setOnClickListener {
+                            if (System.currentTimeMillis() > startDelay) {
+                                startDelay = System.currentTimeMillis() + DOUBLE_CLICK_DELAY
+                                return@setOnClickListener
+                            }
+
+                            if (System.currentTimeMillis() <= startDelay) {
+                                generateVibration()
+                                YoYo.with(Techniques.RubberBand)
+                                    .duration(500)
+                                    .playOn(it)
+                                binding.exoVv.player?.apply {
+                                    val position =
+                                        args.subtitleJob.contents.timeLines[absoluteAdapterPosition].startTime.totalTime
+                                    seekTo(position)
+                                }
+                                when (tracker.state) {
+                                    PlayerConstants.PlayerState.PAUSED,
+                                    PlayerConstants.PlayerState.PLAYING -> {
+                                        binding.pvYoutube.getYouTubePlayerWhenReady(object :
+                                            YouTubePlayerCallback {
+                                            override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
+                                                val position =
+                                                    args.subtitleJob.contents.timeLines[absoluteAdapterPosition].startTime.totalTime
+                                                youTubePlayer.seekTo(position.toFloat() / 1000)
+                                            }
+                                        })
+                                    }
+                                    else -> return@setOnClickListener
+                                }
+                            }
+
+                        }
+
+                    }
+
+                    tvEnd.apply {
+                        setOnClickListener {
+                            if (System.currentTimeMillis() > endDelay) {
+                                endDelay = System.currentTimeMillis() + DOUBLE_CLICK_DELAY
+                                return@setOnClickListener
+                            }
+
+                            if (System.currentTimeMillis() <= endDelay) {
+                                generateVibration()
+
+                                YoYo.with(Techniques.RubberBand)
+                                    .duration(500)
+                                    .playOn(it)
+                                binding.exoVv.player?.apply {
+                                    val position =
+                                        args.subtitleJob.contents.timeLines[absoluteAdapterPosition].endTime.totalTime
+                                    seekTo(position)
+                                }
+                                when (tracker.state) {
+                                    PlayerConstants.PlayerState.PAUSED,
+                                    PlayerConstants.PlayerState.PLAYING -> {
+                                        binding.pvYoutube.getYouTubePlayerWhenReady(object :
+                                            YouTubePlayerCallback {
+                                            override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
+                                                val position =
+                                                    args.subtitleJob.contents.timeLines[absoluteAdapterPosition].endTime.totalTime
+                                                youTubePlayer.seekTo(position.toFloat() / 1000)
+                                            }
+                                        })
+                                    }
+                                    else -> return@setOnClickListener
+                                }
+                            }
+                        }
                     }
 
                     startTimeAutoBtn.apply {
                         setOnClickListener {
 
-                            generateVibration()
-
-                            val anim = AnimationUtils.loadAnimation(
-                                requireContext(),
-                                R.anim.btn_extensions
-                            )
-                            startTimeAutoBtn.startAnimation(anim)
-
-                            binding.exoVv.player?.let {
+                            binding.exoVv.player?.let { player->
                                 args.subtitleJob.contents.timeLines[absoluteAdapterPosition].startTime =
-                                    VideoTime(it.currentPosition)
-                                startTimeEt.setVideoTime(VideoTime(it.currentPosition))
+                                    VideoTime(player.currentPosition)
+                                //startTimeEt.setVideoTime(VideoTime(it.currentPosition))
+                                bind(args.subtitleJob.contents.timeLines[absoluteAdapterPosition])
                                 //viewModel.updateSubtitleFile(args.subtitleJob)
+                                generateVibration()
+                                YoYo.with(Techniques.RubberBand)
+                                    .duration(500)
+                                    .playOn(it)
+                                YoYo.with(Techniques.StandUp)
+                                    .duration(500)
+                                    .playOn(startTimeEt)
                             }
                             when (tracker.state) {
                                 PlayerConstants.PlayerState.PAUSED,
@@ -540,32 +639,54 @@ class WorkSpaceFragment : Fragment() {
                                     val startTime = (tracker.currentSecond * 1000).toLong()
                                     args.subtitleJob.contents.timeLines[absoluteAdapterPosition].startTime =
                                         VideoTime(startTime)
-                                    startTimeEt.setVideoTime(VideoTime(startTime))
+                                    //startTimeEt.setVideoTime(VideoTime(startTime))
+                                    bind(args.subtitleJob.contents.timeLines[absoluteAdapterPosition])
                                     //viewModel.updateSubtitleFile(args.subtitleJob)
+                                    generateVibration()
+                                    YoYo.with(Techniques.RubberBand)
+                                        .duration(500)
+                                        .playOn(it)
+                                    YoYo.with(Techniques.StandUp)
+                                        .duration(500)
+                                        .playOn(startTimeEt)
                                 }
                                 else -> return@setOnClickListener
                             }
 
+
+                        }
+
+                        setOnLongClickListener {
+                            generateVibration()
+                            YoYo.with(Techniques.RubberBand)
+                                .duration(500)
+                                .playOn(it)
+                            YoYo.with(Techniques.StandUp)
+                                .duration(500)
+                                .playOn(startTimeEt)
+                            args.subtitleJob.contents.timeLines[absoluteAdapterPosition].startTime =
+                                VideoTime(0)
+                            bind(args.subtitleJob.contents.timeLines[absoluteAdapterPosition])
+                            true
                         }
                     }
 
                     endTimeAutoBtn.apply {
                         setOnClickListener {
-                            generateVibration()
-                            val anim = AnimationUtils.loadAnimation(
-                                requireContext(),
-                                R.anim.btn_extensions
-                            )
 
-                            endTimeAutoBtn.startAnimation(anim)
-
-
-
-                            binding.exoVv.player?.let {
+                            binding.exoVv.player?.let { player->
                                 args.subtitleJob.contents.timeLines[absoluteAdapterPosition].endTime =
-                                    VideoTime(it.currentPosition)
-                                endTimeEt.setVideoTime(VideoTime(it.currentPosition))
+                                    VideoTime(player.currentPosition)
+                                //endTimeEt.setVideoTime(VideoTime(it.currentPosition))
+                                bind(args.subtitleJob.contents.timeLines[absoluteAdapterPosition])
                                 //viewModel.updateSubtitleFile(args.subtitleJob)
+                                generateVibration()
+                                YoYo.with(Techniques.RubberBand)
+                                    .duration(500)
+                                    .playOn(it)
+                                YoYo.with(Techniques.StandUp)
+                                    .duration(500)
+                                    .playOn(endTimeEt)
                             }
                             when (tracker.state) {
                                 PlayerConstants.PlayerState.PAUSED,
@@ -574,11 +695,35 @@ class WorkSpaceFragment : Fragment() {
 
                                     args.subtitleJob.contents.timeLines[absoluteAdapterPosition].endTime =
                                         VideoTime(endTime)
-                                    endTimeEt.setVideoTime(VideoTime(endTime))
+                                    //endTimeEt.setVideoTime(VideoTime(endTime))
+                                    bind(args.subtitleJob.contents.timeLines[absoluteAdapterPosition])
                                     //viewModel.updateSubtitleFile(args.subtitleJob)
+                                    generateVibration()
+                                    YoYo.with(Techniques.RubberBand)
+                                        .duration(500)
+                                        .playOn(it)
+                                    YoYo.with(Techniques.StandUp)
+                                        .duration(500)
+                                        .playOn(endTimeEt)
                                 }
                                 else -> return@setOnClickListener
                             }
+
+
+                        }
+
+                        setOnLongClickListener {
+                            generateVibration()
+                            YoYo.with(Techniques.RubberBand)
+                                .duration(500)
+                                .playOn(it)
+                            YoYo.with(Techniques.StandUp)
+                                .duration(500)
+                                .playOn(endTimeEt)
+                            args.subtitleJob.contents.timeLines[absoluteAdapterPosition].endTime =
+                                VideoTime(0)
+                            bind(args.subtitleJob.contents.timeLines[absoluteAdapterPosition])
+                            true
                         }
                     }
 
@@ -641,7 +786,6 @@ class WorkSpaceFragment : Fragment() {
     ): View {
         _binding = FragmentWorkSpaceBinding.inflate(inflater, container, false)
 
-
         return binding.root
     }
 
@@ -658,7 +802,6 @@ class WorkSpaceFragment : Fragment() {
         ItemTouchHelper(lineListItemHelper).attachToRecyclerView(binding.timelinesRv)
 
         lifecycle.addObserver(binding.pvYoutube)
-
 
 
 
@@ -700,8 +843,29 @@ class WorkSpaceFragment : Fragment() {
                         .setView(dialogBinding.root)
                         .create()
 
+                    dialog.apply {
+                        val windowManager =
+                            activity?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+                        val display = windowManager.defaultDisplay
+                        val size = Point()
+                        display.getSize(size)
+                        val params: ViewGroup.LayoutParams? = window?.attributes
+                        val deviceWidth = size.x
+                        params?.apply {
+                            width = (deviceWidth * 0.9).toInt()
+                        }
+
+                        window?.apply {
+                            attributes = params as WindowManager.LayoutParams
+                            attributes.y -= 200
+                            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        }
+
+
+                    }
+
                     dialogBinding.apply {
-                        tvAddUrlLink.setOnClickListener {
+                        btnSelect.setOnClickListener {
                             // 선택 버튼
                             val url = etUrlLink.text.toString()
 
@@ -736,15 +900,12 @@ class WorkSpaceFragment : Fragment() {
                                 })
 
 
-
-
-
                                 dialog.dismiss()
                             }
 
                         }
 
-                        tvCloseDialog.setOnClickListener {
+                        btnCancel.setOnClickListener {
                             // 닫기 버튼
                             dialog.dismiss()
                         }
@@ -753,40 +914,44 @@ class WorkSpaceFragment : Fragment() {
 
                     dialog.show()
 
+                    dialogBinding.iv.let {
+                        YoYo.with(Techniques.StandUp)
+                            .duration(500)
+                            .pivot(1.0F, 1.0F)
+                            .playOn(it)
+
+                    }
+
                     true
                 }
 
-                R.id.menu_item_select_subtitle_euc_kr -> { //기존 자막파일 가져오기
+//                R.id.menu_item_select_subtitle_euc_kr -> { //기존 자막파일 가져오기
+//                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+//                        addCategory(Intent.CATEGORY_OPENABLE)
+//                        type = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+//                            "application/x-subrip"
+//                        else
+//                            "application/octet-stream"
+//                    }
+//
+//
+//                    startActivityForResult(intent, REQUEST_SUBTITLE_EUC_KR)
+//
+//                    true
+//                }
+
+                R.id.menu_item_select_subtitle -> { //기존 자막파일 가져오기
                     val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                         addCategory(Intent.CATEGORY_OPENABLE)
                         type = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
                             "application/x-subrip"
                         else
                             "application/octet-stream"
-                    }
-
-
-                    startActivityForResult(intent, REQUEST_SUBTITLE_EUC_KR)
-
-                    true
-                }
-
-                R.id.menu_item_select_subtitle_utf_8 -> { //기존 자막파일 가져오기
-                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                        addCategory(Intent.CATEGORY_OPENABLE)
-                        type = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-                            "application/x-subrip"
-                        else
-                            "application/octet-stream"
 
                     }
 
 
-                    startActivityForResult(intent, REQUEST_SUBTITLE_UTF_8)
-
-                    true
-                }
-                R.id.menu_item_set_subtitle_file_title -> { //자막파일명 지정하기
+                    startActivityForResult(intent, REQUEST_SUBTITLE)
 
                     true
                 }
@@ -799,27 +964,74 @@ class WorkSpaceFragment : Fragment() {
                         .setView(dialogBinding.root)
                         .create()
 
+                    dialog.apply {
+                        val windowManager =
+                            activity?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+                        val display = windowManager.defaultDisplay
+                        val size = Point()
+                        display.getSize(size)
+                        val params: ViewGroup.LayoutParams? = window?.attributes
+                        val deviceWidth = size.x
+                        params?.apply {
+                            width = (deviceWidth * 0.9).toInt()
+                        }
+
+                        window?.apply {
+                            attributes = params as WindowManager.LayoutParams
+                            attributes.y -= 200
+                            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        }
+
+
+                    }
+
+
                     dialogBinding.apply {
-                        addLineLastTv.setOnClickListener {
-                            addTimeLine()
-                            dialog.dismiss()
-                        }
-                        addLineNumTv.setOnClickListener {
-                            val addLineNum = if (lineNumEt.text.isNotEmpty())
-                                lineNumEt.text.toString().toInt()
-                            else
+
+//                        btnAddLine.setOnClickListener {
+//                            addTimeLine()
+//                            dialog.dismiss()
+//                        }
+                        btnAddLine.setOnClickListener {
+                            val position: Int = if(etLineNum.text.isBlank()) {
                                 LAST_LINE_NUM
-                            val position = if (addLineNum == LAST_LINE_NUM)
-                                LAST_LINE_NUM
-                            else
-                                addLineNum - 1
+                            } else {
+                                try {
+                                    val inputNum = etLineNum.text.toString().toInt()
+                                    if(inputNum <= 0) {
+                                        MakeToast(requireContext(), getString(R.string.noticeLineNum))
+                                        return@setOnClickListener
+                                    } else {
+                                        inputNum-1
+                                    }
+                                } catch(E: Exception) {
+                                    MakeToast(requireContext(), getString(R.string.noticeLineNum))
+                                    return@setOnClickListener
+                                }
+                            }
+
                             addTimeLine(position, TimeLine())
+                            val text = if(etLineNum.text.isBlank()) "마지막" else etLineNum.text.toString()
+                            MakeToast(requireContext(),getString(R.string.lineAdded, text))
                             dialog.dismiss()
                         }
+                        btnCancel.setOnClickListener{
+                            dialog.dismiss()
+                        }
+
+                        iv.let {
+                            YoYo.with(Techniques.StandUp)
+                                .duration(500)
+                                .pivot(1.0F, 1.0F)
+                                .playOn(it)
+
+                        }
+
+
                     }
 
                     dialog.show()
-
+                    //TODO
 
 
                     true
@@ -852,16 +1064,19 @@ class WorkSpaceFragment : Fragment() {
         }
 
         binding.resumeBtn.setOnClickListener {
-
+            generateVibration()
+            YoYo.with(Techniques.RubberBand)
+                .duration(500)
+                .playOn(it)
             binding.exoVv.player?.apply {
                 if (isPlaying) {
                     pause()
 
-                    binding.resumeBtn.setImageResource(R.drawable.ic_play_24)
+                    binding.resumeBtn.setImageResource(R.drawable.ic_play)
                 } else {
                     seekTo(this.currentPosition)
                     play()
-                    binding.resumeBtn.setImageResource(R.drawable.ic_pause_24)
+                    binding.resumeBtn.setImageResource(R.drawable.ic_pause)
                 }
             }
 
@@ -871,12 +1086,12 @@ class WorkSpaceFragment : Fragment() {
                         when (tracker.state) {
                             PlayerConstants.PlayerState.PLAYING -> {
                                 youTubePlayer.pause()
-                                binding.resumeBtn.setImageResource(R.drawable.ic_play_24)
+                                binding.resumeBtn.setImageResource(R.drawable.ic_play)
                             }
                             PlayerConstants.PlayerState.PAUSED,
                             PlayerConstants.PlayerState.VIDEO_CUED -> {
                                 youTubePlayer.play()
-                                binding.resumeBtn.setImageResource(R.drawable.ic_pause_24)
+                                binding.resumeBtn.setImageResource(R.drawable.ic_pause)
                             }
                             else -> {}
 
@@ -892,6 +1107,10 @@ class WorkSpaceFragment : Fragment() {
         }
 
         binding.moveLeftBtn.setOnClickListener {
+            generateVibration()
+            YoYo.with(Techniques.RubberBand)
+                .duration(500)
+                .playOn(it)
             binding.exoVv.player?.apply {
 
                 lifecycleScope.launch {
@@ -919,6 +1138,10 @@ class WorkSpaceFragment : Fragment() {
         }
 
         binding.moveRightBtn.setOnClickListener {
+            generateVibration()
+            YoYo.with(Techniques.RubberBand)
+                .duration(500)
+                .playOn(it)
             binding.exoVv.player?.apply {
                 lifecycleScope.launch {
                     val movePosition = currentPosition + getLeafTime() * 1000
@@ -1072,21 +1295,21 @@ class WorkSpaceFragment : Fragment() {
                     } ?: MakeToast(requireContext(), getString(R.string.getVideoFailed))
                 }
 
-                REQUEST_SUBTITLE_UTF_8 -> {
+                REQUEST_SUBTITLE -> {
                     data?.let {
                         val uri = it.data
 
-                        viewModel.loadSubtitleFileUri(uri, args.subtitleJob, "UTF-8")
+                        viewModel.loadSubtitleFileUri(uri, args.subtitleJob)
                     }
                 }
 
-                REQUEST_SUBTITLE_EUC_KR -> {
-                    data?.let {
-                        val uri = it.data
-
-                        viewModel.loadSubtitleFileUri(uri, args.subtitleJob, "EUC-KR")
-                    }
-                }
+//                REQUEST_SUBTITLE_EUC_KR -> {
+//                    data?.let {
+//                        val uri = it.data
+//
+//                        viewModel.loadSubtitleFileUri(uri, args.subtitleJob, "EUC-KR")
+//                    }
+//                }
 
                 REQUEST_EXPORT_FILE -> {
                     data?.let {

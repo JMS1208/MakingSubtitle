@@ -1,8 +1,14 @@
 package com.jms.makingsubtitle.ui.view.home
 
 import android.app.AlertDialog
+import android.content.ContentValues.TAG
+import android.content.Context
+import android.graphics.Color
+import android.graphics.Point
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.format.DateFormat
+import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
@@ -13,10 +19,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 import com.google.android.exoplayer2.util.Util
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.jms.makingsubtitle.MainActivity
 import com.jms.makingsubtitle.R
 import com.jms.makingsubtitle.data.model.SubtitleFile
+import com.jms.makingsubtitle.databinding.DialogDeleteAllJobsBinding
 import com.jms.makingsubtitle.databinding.DialogSetJobFileNameBinding
 import com.jms.makingsubtitle.databinding.FragmentHomeBinding
 import com.jms.makingsubtitle.databinding.ItemJobListBinding
@@ -38,6 +52,9 @@ class HomeFragment : Fragment() {
     private lateinit var adapter: JobListAdapter
 
     private var unFilteredList: List<SubtitleFile> = listOf()
+
+
+    private var mInterstitialAd: InterstitialAd? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,7 +85,8 @@ class HomeFragment : Fragment() {
                     subtitleFile.thumbnailUri?.let {
                         Glide.with(requireContext())
                             .load(it)
-                            .transform(FitCenter(),RoundedCorners(20))
+                            .error(R.drawable.thumbnails)
+                            .transform(FitCenter(), RoundedCorners(20))
                             .into(thumbnailIv)
 
                     } ?: Glide.with(requireContext())
@@ -82,6 +100,8 @@ class HomeFragment : Fragment() {
                     val action =
                         HomeFragmentDirections.actionFragmentHomeToFragmentWorkSpace(subtitleFile)
                     findNavController().navigate(action)
+
+                    mInterstitialAd?.show(activity as MainActivity)
 
                 }
                 itemView.setOnLongClickListener {
@@ -106,17 +126,38 @@ class HomeFragment : Fragment() {
                                     val dialog = AlertDialog.Builder(requireContext())
                                         .setView(dialogBinding.root)
                                         .create()
+
+                                    dialog.apply {
+                                        val windowManager =
+                                            activity?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+                                        val display = windowManager.defaultDisplay
+                                        val size = Point()
+                                        display.getSize(size)
+                                        val params: ViewGroup.LayoutParams? = window?.attributes
+                                        val deviceWidth = size.x
+                                        params?.apply {
+                                            width = (deviceWidth * 0.9).toInt()
+                                        }
+
+                                        window?.apply {
+                                            attributes = params as WindowManager.LayoutParams
+                                            attributes.y -= 200
+                                            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                                        }
+                                    }
+
+
                                     dialogBinding.apply {
 
                                         etFileName.setText(subtitleFile.fileName)
                                         etJobName.setText(subtitleFile.jobName)
-                                        tvSubType.text = subtitleFile.type
+                                        tvTypeName.text = subtitleFile.type
 
-                                        tvCloseDialog.setOnClickListener {
+                                        btnCancel.setOnClickListener {
                                             dialog.dismiss()
                                         }
 
-                                        tvSelect.setOnClickListener {
+                                        btnSelect.setOnClickListener {
                                             val tmpSubtitleFile = subtitleFile.copy()
                                             tmpSubtitleFile.apply {
                                                 this.fileName = etFileName.text.toString()
@@ -127,9 +168,19 @@ class HomeFragment : Fragment() {
                                             dialog.dismiss()
                                             MakeToast(requireContext(), getString(R.string.updated))
                                         }
+
+
+
                                     }
                                     dialog.show()
 
+                                    dialogBinding.iv.let {
+                                        YoYo.with(Techniques.StandUp)
+                                            .duration(500)
+                                            .pivot(1.0F, 1.0F)
+                                            .playOn(it)
+
+                                    }
                                     true
                                 }
                                 R.id.menu_item_set_jobName -> {
@@ -140,17 +191,37 @@ class HomeFragment : Fragment() {
                                     val dialog = AlertDialog.Builder(requireContext())
                                         .setView(dialogBinding.root)
                                         .create()
+
+                                    dialog.apply {
+                                        val windowManager =
+                                            activity?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+                                        val display = windowManager.defaultDisplay
+                                        val size = Point()
+                                        display.getSize(size)
+                                        val params: ViewGroup.LayoutParams? = window?.attributes
+                                        val deviceWidth = size.x
+                                        params?.apply {
+                                            width = (deviceWidth * 0.9).toInt()
+                                        }
+
+                                        window?.apply {
+                                            attributes = params as WindowManager.LayoutParams
+                                            attributes.y -= 200
+                                            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                                        }
+                                    }
+
                                     dialogBinding.apply {
 
                                         etFileName.setText(subtitleFile.fileName)
                                         etJobName.setText(subtitleFile.jobName)
-                                        tvSubType.text = subtitleFile.type
+                                        tvTypeName.text = subtitleFile.type
 
-                                        tvCloseDialog.setOnClickListener {
+                                        btnCancel.setOnClickListener {
                                             dialog.dismiss()
                                         }
 
-                                        tvSelect.setOnClickListener {
+                                        btnSelect.setOnClickListener {
 
                                             val tmpSubtitleFile = subtitleFile.copy()
                                             tmpSubtitleFile.apply {
@@ -165,6 +236,15 @@ class HomeFragment : Fragment() {
                                         }
                                     }
                                     dialog.show()
+
+                                    dialogBinding.iv.let {
+                                        YoYo.with(Techniques.StandUp)
+                                            .duration(500)
+                                            .pivot(1.0F, 1.0F)
+                                            .playOn(it)
+
+                                    }
+
                                     true
                                 }
 
@@ -202,7 +282,8 @@ class HomeFragment : Fragment() {
                         unFilteredList
                     } else {
                         unFilteredList.filter {
-                            it.jobName.contains(inputText) }
+                            it.jobName.contains(inputText)
+                        }
                     }
 
                     return FilterResults().apply {
@@ -240,13 +321,12 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+
         adapter = JobListAdapter()
         binding.jobListRv.adapter = adapter
         binding.jobListRv.layoutManager = LinearLayoutManager(requireContext())
-
-
-
-
 
 
         viewModel.allSubtitleList.observe(viewLifecycleOwner) { subtitleFileList ->
@@ -305,7 +385,73 @@ class HomeFragment : Fragment() {
                     true
                 }
                 R.id.menu_item_delete_all -> {
-                    viewModel.deleteAllSubtitleFiles()
+                    val dialogBinding =
+                        DialogDeleteAllJobsBinding.inflate(layoutInflater)
+
+                    val dialog = AlertDialog.Builder(requireContext())
+                        .setView(dialogBinding.root)
+                        .create()
+
+                    dialog.apply {
+                        val windowManager =
+                            activity?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+                        val display = windowManager.defaultDisplay
+                        val size = Point()
+                        display.getSize(size)
+                        val params: ViewGroup.LayoutParams? = window?.attributes
+                        val deviceWidth = size.x
+                        params?.apply {
+                            width = (deviceWidth * 0.9).toInt()
+                        }
+
+                        window?.apply {
+                            attributes = params as WindowManager.LayoutParams
+                            attributes.y -= 200
+                            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        }
+                    }
+
+                    dialogBinding.apply {
+
+
+                        btnCancel.setOnClickListener {
+                            dialog.dismiss()
+                        }
+
+                        btnDelete.setOnClickListener {
+
+                            val userInput = etDeleteUserInput.text.toString()
+
+                            when {
+                                userInput == getString(R.string.deleteComment)-> {
+                                    viewModel.deleteAllSubtitleFiles()
+                                    dialog.dismiss()
+                                    MakeToast(requireContext(), getString(R.string.deleted))
+                                }
+
+                                userInput.isBlank() || userInput != getString(R.string.deleteComment)-> {
+                                    MakeToast(requireContext(), getString(R.string.noticeDelete))
+                                }
+
+                                else-> return@setOnClickListener
+
+                            }
+
+
+
+                        }
+                    }
+                    dialog.show()
+
+                    dialogBinding.iv.let {
+                        YoYo.with(Techniques.StandUp)
+                            .duration(500)
+                            .pivot(1.0F, 1.0F)
+                            .playOn(it)
+
+                    }
+
+
                     true
                 }
                 R.id.menu_item_settings -> {
@@ -320,8 +466,22 @@ class HomeFragment : Fragment() {
 
         }
 
-    }
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
 
+        InterstitialAd.load(requireContext(),"ca-app-pub-3940256099942544/1033173712", adRequest, object : InterstitialAdLoadCallback() {
+            override fun onAdFailedToLoad(adError: LoadAdError) {
+                Log.d(TAG, "2 onAdFailedToLoad: ")
+                mInterstitialAd = null
+            }
+
+            override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                Log.d(TAG, "2 Ad was loaded.")
+                mInterstitialAd = interstitialAd
+            }
+        })
+
+    }
 
     override fun onDestroy() {
         super.onDestroy()

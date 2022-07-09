@@ -332,5 +332,13 @@ class TimeEditText @JvmOverloads constructor(
         MS_EditText.removeTextChangedListener(textWatcher)
     }
 
+    fun setColor(colorId: Int) {
+        HH_EditText.setTextColor(resources.getColor(colorId))
+        MM_EditText.setTextColor(resources.getColor(colorId))
+        SS_EditText.setTextColor(resources.getColor(colorId))
+        MS_EditText.setTextColor(resources.getColor(colorId))
+    }
+
+
 
 }

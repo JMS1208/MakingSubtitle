@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import com.google.android.gms.ads.MobileAds
 import com.jms.makingsubtitle.data.datastore.ShowOptions
 import com.jms.makingsubtitle.data.room.SubtitleFileDatabase
 import com.jms.makingsubtitle.databinding.ActivityMainBinding
@@ -56,6 +57,9 @@ class MainActivity : AppCompatActivity() {
                 else-> return@launch
             }
         }
+
+
+        MobileAds.initialize(this) {}
 
 
 

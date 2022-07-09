@@ -28,6 +28,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.net.URLEncoder
+import java.nio.ByteBuffer
 import java.nio.charset.Charset
 import java.util.*
 
@@ -117,14 +118,29 @@ class MainViewModel(
         val timeLines: MutableList<TimeLine> = mutableListOf()
 
 
-        val inputStream = getApplication<Application>().contentResolver.openInputStream(uri)
+        var inputStream = getApplication<Application>().contentResolver.openInputStream(uri)
 
-        // TODO charsetName 내부에서 알아낼 수 있으면 추가하기
+
+        val decoder = Charset.forName("UTF-8").newDecoder()
+
+        val newCharsetName = try {
+            decoder.decode(ByteBuffer.wrap(inputStream!!.readBytes())) //이게 되면 UTF-8
+            "UTF-8"
+        } catch(E: Exception) { // 안 되면 EUC-KR
+            "EUC-KR"
+        }
+
+        inputStream = getApplication<Application>().contentResolver.openInputStream(uri)
 
 
         //오픈 소스 라이브러리 이용한 파싱
 
-        val parser = SrtParser(charsetName)
+        val parser = if(charsetName != "UTF-8" && charsetName != "EUC-KR") {
+            SrtParser(charsetName)
+        } else {
+            SrtParser(newCharsetName)
+        }
+
         val subtitle: SrtObject = parser.parse(inputStream)
 
 
@@ -167,13 +183,13 @@ class MainViewModel(
     }
 
 
-    fun loadSubtitleFileUri(uri: Uri?, subtitleFile: SubtitleFile, charsetName: String) {
+    fun loadSubtitleFileUri(uri: Uri?, subtitleFile: SubtitleFile) {
 
 
         uri?.let {
             viewModelScope.launch(Dispatchers.IO) {
                 try {
-                    makeSubtitleFileByUri(uri, subtitleFile, charsetName)
+                    makeSubtitleFileByUri(uri, subtitleFile)
                 } catch (E: Exception) {
                     Log.e("MainViewModel", "makeSubtitleFileByUri exception called")
                 }
