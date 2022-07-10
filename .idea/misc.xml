@@ -58,9 +58,13 @@
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/cv_time_et.xml" value="0.26358695652173914" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_add_line.xml" value="0.33" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_add_line2.xml" value="0.18" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_color_picker.xml" value="0.25" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_color_picker2.xml" value="0.2963275643731532" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_delete_all_contents.xml" value="0.2116289012398461" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_delete_all_jobs.xml" value="0.14" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_instruction.xml" value="0.1716485507246377" />
-        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_set_job_file_name.xml" value="0.5" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_scroll_to_item.xml" value="0.33" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_set_job_file_name.xml" value="0.4004106776180698" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_set_job_file_name2.xml" value="0.2" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_video_url_link.xml" value="0.18" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_video_url_link2.xml" value="0.33" />

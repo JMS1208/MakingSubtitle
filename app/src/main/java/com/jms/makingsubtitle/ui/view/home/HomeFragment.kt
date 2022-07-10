@@ -315,6 +315,14 @@ class HomeFragment : Fragment() {
             oldSubtitleFileList = newSubtitleFileList
 
             diffResults.dispatchUpdatesTo(this)
+
+            if(newSubtitleFileList.isEmpty()) {
+                Log.d(TAG, "setData(): 작업 없음 ")
+                binding.llIsEmpty.visibility = View.VISIBLE
+            } else {
+                Log.d(TAG, "setData(): 작업 있음 ")
+                binding.llIsEmpty.visibility = View.GONE
+            }
         }
     }
 

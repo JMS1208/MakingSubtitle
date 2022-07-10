@@ -1,7 +1,11 @@
 package com.jms.makingsubtitle.ui.view.workspace
 
 import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.ContentValues.TAG
 import android.content.Context
+import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Point
@@ -10,15 +14,22 @@ import android.net.Uri
 import android.os.*
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
-import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.view.*
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.*
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.google.android.exoplayer2.ExoPlayer
@@ -27,13 +38,13 @@ import com.google.android.exoplayer2.util.Util
 import com.google.android.material.snackbar.Snackbar
 import com.jms.makingsubtitle.MainActivity
 import com.jms.makingsubtitle.R
+import com.jms.makingsubtitle.data.datastore.LeafTimeMode
+import com.jms.makingsubtitle.data.datastore.VibrationOptions
 import com.jms.makingsubtitle.data.model.TimeLine
 import com.jms.makingsubtitle.data.model.VideoTime
-import com.jms.makingsubtitle.databinding.DialogAddLineBinding
-import com.jms.makingsubtitle.databinding.DialogVideoUrlLinkBinding
-import com.jms.makingsubtitle.databinding.FragmentWorkSpaceBinding
-import com.jms.makingsubtitle.databinding.ItemLineListBinding
+import com.jms.makingsubtitle.databinding.*
 import com.jms.makingsubtitle.ui.viewmodel.MainViewModel
+import com.jms.makingsubtitle.util.Contants.DOUBLE_CLICK_DELAY
 import com.jms.makingsubtitle.util.Contants.LAST_LINE_NUM
 import com.jms.makingsubtitle.util.Contants.MakeToast
 import com.jms.makingsubtitle.util.Contants.REQUEST_EXPORT_FILE
@@ -41,15 +52,15 @@ import com.jms.makingsubtitle.util.Contants.REQUEST_SUBTITLE
 import com.jms.makingsubtitle.util.Contants.REQUEST_VIDEO
 import com.jms.makingsubtitle.util.Contants.YOUTUBE_BASE_URL
 import com.jms.makingsubtitle.util.Contants.YOUTUBE_BASE_URL_MOBILE
-import com.jms.makingsubtitle.data.datastore.LeafTimeMode
-import com.jms.makingsubtitle.data.datastore.VibrationOptions
-import com.jms.makingsubtitle.util.Contants.DOUBLE_CLICK_DELAY
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerCallback
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTubePlayerTracker
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import top.defaults.colorpicker.ColorPickerPopup
 import java.io.FileOutputStream
+import java.lang.String
 
 
 class WorkSpaceFragment : Fragment() {
@@ -72,6 +83,8 @@ class WorkSpaceFragment : Fragment() {
     private var youtubePlayPosition = 0F
 
     private val tracker = YouTubePlayerTracker()
+
+    private var recyclerViewState: Parcelable? = null
 
 
     private fun initializeExoPlayer() {
@@ -341,6 +354,7 @@ class WorkSpaceFragment : Fragment() {
                                 addTimeLine(position, timeLine)
                             }
                         }.show()
+
                 }
             }
 
@@ -521,7 +535,7 @@ class WorkSpaceFragment : Fragment() {
                         if (timeLine.startTime.totalTime > timeLine.endTime.totalTime) {
                             startTimeEt.setColor(R.color.yellow)
                         } else {
-                            if(timeLine.startTime.totalTime == 0L) {
+                            if (timeLine.startTime.totalTime == 0L) {
                                 startTimeEt.setColor(R.color.yellow)
                             } else {
                                 startTimeEt.setColor(R.color.mainColor)
@@ -535,7 +549,7 @@ class WorkSpaceFragment : Fragment() {
                         if (timeLine.startTime.totalTime > timeLine.endTime.totalTime) {
                             endTimeEt.setColor(R.color.yellow)
                         } else {
-                            if(timeLine.endTime.totalTime == 0L) {
+                            if (timeLine.endTime.totalTime == 0L) {
                                 endTimeEt.setColor(R.color.yellow)
                             } else {
                                 endTimeEt.setColor(R.color.mainColor)
@@ -619,7 +633,7 @@ class WorkSpaceFragment : Fragment() {
                     startTimeAutoBtn.apply {
                         setOnClickListener {
 
-                            binding.exoVv.player?.let { player->
+                            binding.exoVv.player?.let { player ->
                                 args.subtitleJob.contents.timeLines[absoluteAdapterPosition].startTime =
                                     VideoTime(player.currentPosition)
                                 //startTimeEt.setVideoTime(VideoTime(it.currentPosition))
@@ -674,7 +688,7 @@ class WorkSpaceFragment : Fragment() {
                     endTimeAutoBtn.apply {
                         setOnClickListener {
 
-                            binding.exoVv.player?.let { player->
+                            binding.exoVv.player?.let { player ->
                                 args.subtitleJob.contents.timeLines[absoluteAdapterPosition].endTime =
                                     VideoTime(player.currentPosition)
                                 //endTimeEt.setVideoTime(VideoTime(it.currentPosition))
@@ -774,6 +788,13 @@ class WorkSpaceFragment : Fragment() {
             val diffResults = DiffUtil.calculateDiff(diffUtil)
             oldTimeLineList = newTimeLineList
             diffResults.dispatchUpdatesTo(this)
+            if (newTimeLineList.isEmpty()) {
+                Log.d(TAG, "setData(): 아이템 없음 ")
+                binding.llIsEmpty.visibility = View.VISIBLE
+            } else {
+                Log.d(TAG, "setData(): 아이템 있음 ")
+                binding.llIsEmpty.visibility = View.GONE
+            }
         }
 
 
@@ -786,11 +807,46 @@ class WorkSpaceFragment : Fragment() {
     ): View {
         _binding = FragmentWorkSpaceBinding.inflate(inflater, container, false)
 
+
         return binding.root
+    }
+
+    private fun settingsDialog(dialog: AlertDialog) {
+        dialog.apply {
+            val windowManager =
+                activity?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+            val display = windowManager.defaultDisplay
+            val size = Point()
+            display.getSize(size)
+            val params: ViewGroup.LayoutParams? = window?.attributes
+            val deviceWidth = size.x
+            val deviceHeight = size.y
+            params?.apply {
+                if(size.x < size.y) {
+                    height = (deviceWidth * 0.5).toInt()
+                } else {
+                    width = (deviceHeight * 0.5).toInt()
+                }
+            }
+
+            window?.apply {
+                attributes = params as WindowManager.LayoutParams
+                //attributes.y -= 200
+                setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            }
+
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.toolbar.apply {
+            setNavigationIcon(R.drawable.ic_back_24)
+            setNavigationOnClickListener {
+                findNavController().popBackStack()
+            }
+        }
 
         adapter = SubtitleLineAdapter()
         binding.timelinesRv.adapter = adapter
@@ -843,26 +899,7 @@ class WorkSpaceFragment : Fragment() {
                         .setView(dialogBinding.root)
                         .create()
 
-                    dialog.apply {
-                        val windowManager =
-                            activity?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-                        val display = windowManager.defaultDisplay
-                        val size = Point()
-                        display.getSize(size)
-                        val params: ViewGroup.LayoutParams? = window?.attributes
-                        val deviceWidth = size.x
-                        params?.apply {
-                            width = (deviceWidth * 0.9).toInt()
-                        }
-
-                        window?.apply {
-                            attributes = params as WindowManager.LayoutParams
-                            attributes.y -= 200
-                            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                        }
-
-
-                    }
+                    settingsDialog(dialog)
 
                     dialogBinding.apply {
                         btnSelect.setOnClickListener {
@@ -956,6 +993,103 @@ class WorkSpaceFragment : Fragment() {
                     true
                 }
 
+                R.id.menu_item_color_picker -> { //색상 팔레트
+
+                    val dialogBinding = DialogColorPickerBinding.inflate(layoutInflater)
+
+                    val dialog = AlertDialog.Builder(requireContext())
+                        .setView(dialogBinding.root)
+                        .create()
+
+                    settingsDialog(dialog)
+
+                    dialogBinding.apply {
+
+                        colorPicker.apply {
+                            setInitialColor(Color.parseColor("#DA1212"))
+
+                            subscribe { color, fromUser, shouldPropagate ->
+
+                                if (fromUser) {
+                                    val hexColor = String.format(
+                                        "#%06X",
+                                        0xFFFFFF and color
+                                    )
+                                    Log.d(TAG, "onColorPicked: $hexColor ")
+                                    etSelectedColor.apply {
+                                        setText(hexColor)
+                                        setTextColor(color)
+                                    }
+
+                                }
+
+                            }
+                        }
+                        etSelectedColor.addTextChangedListener(
+                            object : TextWatcher {
+                                override fun beforeTextChanged(
+                                    p0: CharSequence?,
+                                    p1: Int,
+                                    p2: Int,
+                                    p3: Int
+                                ) {
+
+                                }
+
+                                override fun onTextChanged(
+                                    p0: CharSequence?,
+                                    p1: Int,
+                                    p2: Int,
+                                    p3: Int
+                                ) {
+                                    try {
+                                        val color = Color.parseColor(p0.toString())
+                                        colorPicker.setInitialColor(color)
+                                        etSelectedColor.setTextColor(color)
+                                    } catch (E: Exception) {
+                                    }
+
+                                }
+
+                                override fun afterTextChanged(p0: Editable?) {
+
+                                }
+
+                            }
+                        )
+//
+                        btnCopy.setOnClickListener {
+                            activity?.applicationContext?.let { applicationContext ->
+                                val clipboardManager =
+                                    applicationContext.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+                                val clip = ClipData.newPlainText("color", etSelectedColor.text)
+                                clipboardManager.setPrimaryClip(clip)
+                                MakeToast(requireContext(), getString(R.string.colorCopied))
+                                dialog.dismiss()
+                            }
+
+                        }
+                        btnCancel.setOnClickListener {
+                            dialog.dismiss()
+                        }
+
+                        iv.let {
+                            YoYo.with(Techniques.StandUp)
+                                .duration(500)
+                                .pivot(1.0F, 1.0F)
+                                .playOn(it)
+
+                        }
+
+
+                    }
+
+                    dialog.show()
+
+                    true
+
+                }
+
                 R.id.menu_item_add_line -> { //한줄 추가
 
                     val dialogBinding = DialogAddLineBinding.inflate(layoutInflater)
@@ -964,26 +1098,7 @@ class WorkSpaceFragment : Fragment() {
                         .setView(dialogBinding.root)
                         .create()
 
-                    dialog.apply {
-                        val windowManager =
-                            activity?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-                        val display = windowManager.defaultDisplay
-                        val size = Point()
-                        display.getSize(size)
-                        val params: ViewGroup.LayoutParams? = window?.attributes
-                        val deviceWidth = size.x
-                        params?.apply {
-                            width = (deviceWidth * 0.9).toInt()
-                        }
-
-                        window?.apply {
-                            attributes = params as WindowManager.LayoutParams
-                            attributes.y -= 200
-                            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                        }
-
-
-                    }
+                    settingsDialog(dialog)
 
 
                     dialogBinding.apply {
@@ -993,29 +1108,41 @@ class WorkSpaceFragment : Fragment() {
 //                            dialog.dismiss()
 //                        }
                         btnAddLine.setOnClickListener {
-                            val position: Int = if(etLineNum.text.isBlank()) {
-                                LAST_LINE_NUM
-                            } else {
-                                try {
-                                    val inputNum = etLineNum.text.toString().toInt()
-                                    if(inputNum <= 0) {
-                                        MakeToast(requireContext(), getString(R.string.noticeLineNum))
+                            val position: Int =
+                                if (etLineNum.text.isBlank()) {
+                                    LAST_LINE_NUM
+                                } else {
+                                    try {
+                                        val inputNum = etLineNum.text.toString().toInt()
+                                        if (inputNum <= 0) {
+                                            MakeToast(
+                                                requireContext(),
+                                                getString(R.string.noticeLineNum)
+                                            )
+                                            return@setOnClickListener
+                                        } else {
+                                            if(inputNum > args.subtitleJob.contents.timeLines.size + 1) {
+                                                LAST_LINE_NUM
+                                            } else {
+                                                inputNum - 1
+                                            }
+                                        }
+                                    } catch (E: Exception) {
+                                        MakeToast(
+                                            requireContext(),
+                                            getString(R.string.noticeLineNum)
+                                        )
                                         return@setOnClickListener
-                                    } else {
-                                        inputNum-1
                                     }
-                                } catch(E: Exception) {
-                                    MakeToast(requireContext(), getString(R.string.noticeLineNum))
-                                    return@setOnClickListener
                                 }
-                            }
 
                             addTimeLine(position, TimeLine())
-                            val text = if(etLineNum.text.isBlank()) "마지막" else etLineNum.text.toString()
-                            MakeToast(requireContext(),getString(R.string.lineAdded, text))
+                            val text =
+                                if (position == LAST_LINE_NUM) "마지막" else "${position + 1}"
+                            MakeToast(requireContext(), getString(R.string.lineAdded, text))
                             dialog.dismiss()
                         }
-                        btnCancel.setOnClickListener{
+                        btnCancel.setOnClickListener {
                             dialog.dismiss()
                         }
 
@@ -1037,8 +1164,62 @@ class WorkSpaceFragment : Fragment() {
                     true
                 }
 
+                R.id.menu_item_delete_contents -> { //아이템 모두 삭제
+
+                    val dialogBinding =
+                        DialogDeleteAllContentsBinding.inflate(layoutInflater)
+
+                    val dialog = AlertDialog.Builder(requireContext())
+                        .setView(dialogBinding.root)
+                        .create()
+
+                    settingsDialog(dialog)
+
+                    dialogBinding.apply {
+
+
+                        btnCancel.setOnClickListener {
+                            dialog.dismiss()
+                        }
+
+                        btnDelete.setOnClickListener {
+
+                            val userInput = etDeleteUserInput.text.toString()
+
+                            when {
+                                userInput == getString(R.string.deleteComment) -> {
+                                    args.subtitleJob.contents.timeLines = mutableListOf()
+                                    viewModel.updateSubtitleFile(args.subtitleJob)
+                                    dialog.dismiss()
+                                    MakeToast(requireContext(), getString(R.string.deleted))
+                                }
+
+                                userInput.isBlank() || userInput != getString(R.string.deleteComment) -> {
+                                    MakeToast(requireContext(), getString(R.string.noticeDelete))
+                                    MakeToast(requireContext(), getString(R.string.noticeDelete))
+                                }
+
+                                else -> return@setOnClickListener
+
+                            }
+
+
+                        }
+                    }
+                    dialog.show()
+
+                    dialogBinding.iv.let {
+                        YoYo.with(Techniques.StandUp)
+                            .duration(500)
+                            .pivot(1.0F, 1.0F)
+                            .playOn(it)
+
+                    }
+                    true
+
+                }
                 R.id.menu_item_export_subtitle_file -> {
-                    //자막 파일 내보내기
+                    //자막 파일로 저장하기
                     val subtitleFile = args.subtitleJob
                     val fileName = subtitleFile.fileName.replace(" ", "_") + "." + subtitleFile.type
 
@@ -1054,6 +1235,77 @@ class WorkSpaceFragment : Fragment() {
 
                     startActivityForResult(intent, REQUEST_EXPORT_FILE)
 
+                    true
+                }
+
+                R.id.menu_item_scroll_line -> {
+                    val dialogBinding = DialogScrollToItemBinding.inflate(layoutInflater)
+
+                    val dialog = AlertDialog.Builder(requireContext())
+                        .setView(dialogBinding.root)
+                        .create()
+
+                    settingsDialog(dialog)
+
+
+                    dialogBinding.apply {
+
+//                        btnAddLine.setOnClickListener {
+//                            addTimeLine()
+//                            dialog.dismiss()
+//                        }
+                        btnMoveLine.setOnClickListener {
+                            val position: Int = if (etLineNum.text.isBlank()) {
+                                LAST_LINE_NUM
+                            } else {
+                                try {
+                                    val inputNum = etLineNum.text.toString().toInt()
+                                    if (inputNum <= 0) {
+                                        MakeToast(
+                                            requireContext(),
+                                            getString(R.string.noticeLineNum)
+                                        )
+                                        return@setOnClickListener
+                                    } else {
+                                        inputNum - 1
+                                    }
+                                } catch (E: Exception) {
+                                    MakeToast(requireContext(), getString(R.string.noticeLineNum))
+                                    return@setOnClickListener
+                                }
+                            }
+
+
+                            if (position > args.subtitleJob.contents.timeLines.lastIndex) {
+                                MakeToast(requireContext(), "숫자가 너무 큽니다")
+                            } else {
+                                dialog.dismiss()
+                                if (position == LAST_LINE_NUM) {
+                                    binding.timelinesRv.scrollToPosition(args.subtitleJob.contents.timeLines.lastIndex)
+                                } else {
+                                    binding.timelinesRv.scrollToPosition(position)
+                                }
+                            }
+
+                        }
+                        btnCancel.setOnClickListener {
+                            dialog.dismiss()
+                        }
+
+
+                    }
+
+                    dialog.show()
+
+                    dialogBinding.iv.let {
+                        YoYo.with(Techniques.StandUp)
+                            .duration(500)
+                            .pivot(1.0F, 1.0F)
+                            .playOn(it)
+
+                    }
+
+                    //TODO
                     true
                 }
                 else -> false
@@ -1200,9 +1452,9 @@ class WorkSpaceFragment : Fragment() {
         viewModel.getTimeLinesByUUID(args.subtitleJob.uuid)
             .observe(viewLifecycleOwner) { timeLines ->
                 timeLines?.let {
-
+                    recyclerViewState = binding.timelinesRv.layoutManager?.onSaveInstanceState()
                     adapter.setData(timeLines.timeLines)
-
+                    binding.timelinesRv.layoutManager?.onRestoreInstanceState(recyclerViewState)
                 }
 
             }
@@ -1268,13 +1520,15 @@ class WorkSpaceFragment : Fragment() {
                     val timeLine = timeLines[i]
 
                     val line =
-                        "${i + 1}\n${timeLine.startTime} --> ${timeLine.endTime}\n${timeLine.lineContent}\n\n"
+                        "${i + 1}\n${timeLine.startTime} --> ${timeLine.endTime}\n${timeLine.lineContent.trim()}\n\n"
                     outputStream.write(line.toByteArray())
                 }
             }
 
             outputStream.close()
-
+            lifecycleScope.launch(Dispatchers.Main) {
+                MakeToast(requireContext(), getString(R.string.fileGenerated))
+            }
         }
 
     }

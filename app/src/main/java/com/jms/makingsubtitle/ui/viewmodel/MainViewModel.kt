@@ -18,6 +18,7 @@ import com.jms.makingsubtitle.data.model.TimeLine
 import com.jms.makingsubtitle.data.model.TimeLines
 import com.jms.makingsubtitle.data.model.VideoTime
 import com.jms.makingsubtitle.repository.MainRepository
+import com.jms.makingsubtitle.util.Contants.MakeToast
 
 import fr.noop.subtitle.srt.SrtObject
 import fr.noop.subtitle.srt.SrtParser
@@ -27,6 +28,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
+import java.io.IOException
 import java.net.URLEncoder
 import java.nio.ByteBuffer
 import java.nio.charset.Charset
@@ -135,36 +137,83 @@ class MainViewModel(
 
         //오픈 소스 라이브러리 이용한 파싱
 
-        val parser = if(charsetName != "UTF-8" && charsetName != "EUC-KR") {
-            SrtParser(charsetName)
-        } else {
-            SrtParser(newCharsetName)
-        }
 
-        val subtitle: SrtObject = parser.parse(inputStream)
+        inputStream?.use {
+            val br = inputStream.bufferedReader(Charset.forName(newCharsetName))
+
+            while(true) {
 
 
+                br.readLine() ?: break
 
-        withContext(Dispatchers.Default) {
-            for (i in subtitle.cues.indices) {
-                val _cue = subtitle.cues[i]
-                val startTime = VideoTime(
-                    _cue.startTime.hour,
-                    _cue.startTime.minute,
-                    _cue.startTime.second,
-                    _cue.startTime.millisecond
-                )
-                val endTime = VideoTime(
-                    _cue.endTime.hour,
-                    _cue.endTime.minute,
-                    _cue.endTime.second,
-                    _cue.endTime.millisecond
-                )
-                val timeLine = TimeLine(_cue.text, startTime, endTime)
+                val times = br.readLine()
+
+                val (startTime, endTime) = if(times.contains("-->")) {
+                    times.split("-->")
+                }else {
+                    Log.d("TAG", "times: $times")
+                    throw IOException("InAppropriate Subtitle File")
+                }
+
+
+                val textLine = StringBuffer()
+                while(true) {
+                    val tmpTextLine = br.readLine()
+
+                    if(tmpTextLine.isNotBlank()) {
+                        textLine.append(tmpTextLine)
+                        textLine.append("\n")
+                    } else {
+                        break
+                    }
+
+                }
+
+
+                val timeLine = TimeLine().apply {
+                    this.startTime = VideoTime(startTime)
+                    this.endTime = VideoTime(endTime)
+                    this.lineContent = textLine.trim().toString()
+                }
+
                 timeLines.add(timeLine)
+
+
             }
 
         }
+
+//
+//        val parser = if(charsetName != "UTF-8" && charsetName != "EUC-KR") {
+//            SrtParser(charsetName)
+//        } else {
+//            SrtParser(newCharsetName)
+//        }
+//
+//        val subtitle: SrtObject = parser.parse(inputStream)
+//
+//
+//
+//        withContext(Dispatchers.Default) {
+//            for (i in subtitle.cues.indices) {
+//                val _cue = subtitle.cues[i]
+//                val startTime = VideoTime(
+//                    _cue.startTime.hour,
+//                    _cue.startTime.minute,
+//                    _cue.startTime.second,
+//                    _cue.startTime.millisecond
+//                )
+//                val endTime = VideoTime(
+//                    _cue.endTime.hour,
+//                    _cue.endTime.minute,
+//                    _cue.endTime.second,
+//                    _cue.endTime.millisecond
+//                )
+//                val timeLine = TimeLine(_cue.text, startTime, endTime)
+//                timeLines.add(timeLine)
+//            }
+//
+//        }
 
 
         subtitleFile.apply {
@@ -192,6 +241,7 @@ class MainViewModel(
                     makeSubtitleFileByUri(uri, subtitleFile)
                 } catch (E: Exception) {
                     Log.e("MainViewModel", "makeSubtitleFileByUri exception called")
+                    MakeToast(getApplication<Application>().applicationContext,"자막 파일을 읽을 수 없습니다")
                 }
             }
         }

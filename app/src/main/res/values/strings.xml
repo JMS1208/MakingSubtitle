@@ -49,4 +49,8 @@
     <string name="lineAdded">%s에 아이템이 추가되었습니다</string>
     <string name="noticeDelete">\'삭제한다\'를 입력해주세요</string>
     <string name="deleteComment">삭제한다</string>
+    <string name="fileGenerated">자막파일이 생성되었습니다</string>
+    <string name="colorCopied">클립보드에 복사되었습니다</string>
+    <string name="noticeAddItem">아이템을 추가해주세요</string>
+    <string name="noticeAddJob">작업을 추가해주세요</string>
 </resources>
