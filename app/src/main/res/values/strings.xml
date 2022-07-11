@@ -33,14 +33,14 @@
     <string name="fivesec">5초</string>
     <string name="sevensec">7초</string>
     <string name="tensec">10초</string>
-    <string name="appInstructions">어플 사용 방법</string>
+    <string name="appInstructions">튜토리얼</string>
     <string name="floatInstructions">앱 실행시 띄우기</string>
     <string name="InstructionDialogShowNow">지금 보기</string>
-    <string name="appInstructionsExplains">앱 시작시 어플 사용 방법을 보여줍니다</string>
+    <string name="appInstructionsExplains">앱 튜토리얼을 보여줍니다</string>
     <string name="vibrationOptionsExplains">버튼 클릭시 진동을 울릴지 설정합니다</string>
     <string name="setVibration">진동 켜기</string>
     <string name="vibration">진동</string>
-    <string name="timeLineEtComment">자막을 입력해주세요\n비어있으면 파일 생성시 자동삭제됩니다</string>
+    <string name="timeLineEtComment">자막을 입력해주세요\n내용이 비어있으면 파일 생성시 자동삭제됩니다</string>
     <string name="linkComment">유튜브 링크를 입력해주세요</string>
     <string name="linkExample">https://www.youtube.com</string>
     <string name="start">start</string>
@@ -53,4 +53,6 @@
     <string name="colorCopied">클립보드에 복사되었습니다</string>
     <string name="noticeAddItem">아이템을 추가해주세요</string>
     <string name="noticeAddJob">작업을 추가해주세요</string>
+    <string name="license">라이센스</string>
+    <string name="showLicense">전문 보기</string>
 </resources>

@@ -14,8 +14,10 @@ import android.net.Uri
 import android.os.*
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
+import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.WindowCompat
@@ -58,7 +60,6 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.You
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTubePlayerTracker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import top.defaults.colorpicker.ColorPickerPopup
 import java.io.FileOutputStream
 import java.lang.String
 
@@ -243,6 +244,12 @@ class WorkSpaceFragment : Fragment() {
 
         binding.apply {
             btnsPlayers.visibility = View.VISIBLE
+
+            val ll = binding.root.findViewById<LinearLayout>(R.id.ll_land)
+
+            ll?.apply {
+                visibility = View.VISIBLE
+            }
         }
 
     }
@@ -250,6 +257,12 @@ class WorkSpaceFragment : Fragment() {
     private fun setBtnInvisible() {
         binding.apply {
             btnsPlayers.visibility = View.GONE
+
+            val ll = binding.root.findViewById<LinearLayout>(R.id.ll_land)
+
+            ll?.apply {
+                visibility = View.GONE
+            }
         }
     }
 
@@ -816,22 +829,25 @@ class WorkSpaceFragment : Fragment() {
             val windowManager =
                 activity?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
             val display = windowManager.defaultDisplay
-            val size = Point()
-            display.getSize(size)
-            val params: ViewGroup.LayoutParams? = window?.attributes
-            val deviceWidth = size.x
-            val deviceHeight = size.y
-            params?.apply {
-                if(size.x < size.y) {
-                    height = (deviceWidth * 0.5).toInt()
-                } else {
-                    width = (deviceHeight * 0.5).toInt()
-                }
-            }
 
-            window?.apply {
-                attributes = params as WindowManager.LayoutParams
-                //attributes.y -= 200
+
+            val displayMetrics = DisplayMetrics()
+
+            display.getMetrics(displayMetrics)
+            val displayWidth = displayMetrics.widthPixels
+            val displayHeight = displayMetrics.heightPixels
+            val layoutParams = WindowManager.LayoutParams()
+            layoutParams.copyFrom(dialog.window!!.attributes)
+
+            dialog.window?.apply {
+                attributes = layoutParams.apply {
+//                    if(display.rotation == Surface.ROTATION_0) { // 일반적인 세로모드
+//                        layoutParams.width = (displayWidth * 0.7).toInt()
+//                    } else { // 가로모드
+//                        layoutParams.width = (displayWidth * 0.9).toInt()
+//                    }
+
+                }
                 setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             }
 
@@ -899,7 +915,7 @@ class WorkSpaceFragment : Fragment() {
                         .setView(dialogBinding.root)
                         .create()
 
-                    settingsDialog(dialog)
+
 
                     dialogBinding.apply {
                         btnSelect.setOnClickListener {
@@ -950,7 +966,7 @@ class WorkSpaceFragment : Fragment() {
                     }
 
                     dialog.show()
-
+                    settingsDialog(dialog)
                     dialogBinding.iv.let {
                         YoYo.with(Techniques.StandUp)
                             .duration(500)
@@ -958,6 +974,7 @@ class WorkSpaceFragment : Fragment() {
                             .playOn(it)
 
                     }
+
 
                     true
                 }
@@ -1001,7 +1018,6 @@ class WorkSpaceFragment : Fragment() {
                         .setView(dialogBinding.root)
                         .create()
 
-                    settingsDialog(dialog)
 
                     dialogBinding.apply {
 
@@ -1086,6 +1102,34 @@ class WorkSpaceFragment : Fragment() {
 
                     dialog.show()
 
+                    dialog.apply {
+                        val windowManager =
+                            activity?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+                        val display = windowManager.defaultDisplay
+
+
+                        val displayMetrics = DisplayMetrics()
+
+                        display.getMetrics(displayMetrics)
+                        val displayWidth = displayMetrics.widthPixels
+                        val displayHeight = displayMetrics.heightPixels
+                        val layoutParams = WindowManager.LayoutParams()
+                        layoutParams.copyFrom(dialog.window!!.attributes)
+
+                        dialog.window?.apply {
+                            attributes = layoutParams.apply {
+                                if(display.rotation == Surface.ROTATION_0) { // 일반적인 세로모드
+                                    layoutParams.width = (displayWidth * 0.7).toInt()
+                                } else { // 가로모드
+                                    layoutParams.width = (displayWidth * 0.9).toInt()
+                                }
+
+                            }
+                            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        }
+
+                    }
+
                     true
 
                 }
@@ -1098,7 +1142,7 @@ class WorkSpaceFragment : Fragment() {
                         .setView(dialogBinding.root)
                         .create()
 
-                    settingsDialog(dialog)
+
 
 
                     dialogBinding.apply {
@@ -1121,7 +1165,7 @@ class WorkSpaceFragment : Fragment() {
                                             )
                                             return@setOnClickListener
                                         } else {
-                                            if(inputNum > args.subtitleJob.contents.timeLines.size + 1) {
+                                            if (inputNum > args.subtitleJob.contents.timeLines.size + 1) {
                                                 LAST_LINE_NUM
                                             } else {
                                                 inputNum - 1
@@ -1159,6 +1203,7 @@ class WorkSpaceFragment : Fragment() {
 
                     dialog.show()
                     //TODO
+                    settingsDialog(dialog)
 
 
                     true
@@ -1173,7 +1218,7 @@ class WorkSpaceFragment : Fragment() {
                         .setView(dialogBinding.root)
                         .create()
 
-                    settingsDialog(dialog)
+
 
                     dialogBinding.apply {
 
@@ -1207,7 +1252,7 @@ class WorkSpaceFragment : Fragment() {
                         }
                     }
                     dialog.show()
-
+                    settingsDialog(dialog)
                     dialogBinding.iv.let {
                         YoYo.with(Techniques.StandUp)
                             .duration(500)
@@ -1245,7 +1290,7 @@ class WorkSpaceFragment : Fragment() {
                         .setView(dialogBinding.root)
                         .create()
 
-                    settingsDialog(dialog)
+
 
 
                     dialogBinding.apply {
@@ -1296,7 +1341,7 @@ class WorkSpaceFragment : Fragment() {
                     }
 
                     dialog.show()
-
+                    settingsDialog(dialog)
                     dialogBinding.iv.let {
                         YoYo.with(Techniques.StandUp)
                             .duration(500)
