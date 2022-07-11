@@ -22,7 +22,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.google.android.exoplayer2.util.Util
-import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
@@ -34,7 +33,6 @@ import com.jms.makingsubtitle.databinding.DialogDeleteAllJobsBinding
 import com.jms.makingsubtitle.databinding.DialogSetJobFileNameBinding
 import com.jms.makingsubtitle.databinding.FragmentHomeBinding
 import com.jms.makingsubtitle.databinding.ItemJobListBinding
-import com.jms.makingsubtitle.ui.view.instruction.InstructionFragment
 import com.jms.makingsubtitle.ui.viewmodel.MainViewModel
 import com.jms.makingsubtitle.util.Contants.DATE_FORMAT
 import com.jms.makingsubtitle.util.Contants.MakeToast

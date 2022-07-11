@@ -243,26 +243,29 @@ class WorkSpaceFragment : Fragment() {
     private fun setBtnVisible() {
 
         binding.apply {
-            btnsPlayers.visibility = View.VISIBLE
 
             val ll = binding.root.findViewById<LinearLayout>(R.id.ll_land)
 
             ll?.apply {
                 visibility = View.VISIBLE
             }
+
+            btnsPlayers.visibility = View.VISIBLE
+
         }
 
     }
 
     private fun setBtnInvisible() {
         binding.apply {
-            btnsPlayers.visibility = View.GONE
 
             val ll = binding.root.findViewById<LinearLayout>(R.id.ll_land)
 
             ll?.apply {
                 visibility = View.GONE
             }
+            btnsPlayers.visibility = View.GONE
+
         }
     }
 

@@ -15,7 +15,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:buttonGravity="center_vertical"
         app:menu="@menu/menu_home"
-        style="@style/AppTheme.OverFlow"
         android:background="@color/bg_toolbar"
         />
     <androidx.recyclerview.widget.RecyclerView
@@ -62,7 +61,6 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         ads:adSize="SMART_BANNER"
-        android:visibility="gone"
         ads:adUnitId="ca-app-pub-3940256099942544/6300978111"
         ads:layout_constraintBottom_toBottomOf="parent"
         />
