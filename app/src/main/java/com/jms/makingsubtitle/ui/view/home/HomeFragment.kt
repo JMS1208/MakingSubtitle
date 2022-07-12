@@ -29,7 +29,7 @@ import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.jms.makingsubtitle.MainActivity
 import com.jms.makingsubtitle.R
 import com.jms.makingsubtitle.data.model.SubtitleFile
-import com.jms.makingsubtitle.databinding.DialogDeleteAllJobsBinding
+import com.jms.makingsubtitle.databinding.DialogDeleteAllWorkBinding
 import com.jms.makingsubtitle.databinding.DialogSetJobFileNameBinding
 import com.jms.makingsubtitle.databinding.FragmentHomeBinding
 import com.jms.makingsubtitle.databinding.ItemJobListBinding
@@ -149,7 +149,7 @@ class HomeFragment : Fragment() {
 
                                         etFileName.setText(subtitleFile.fileName)
                                         etJobName.setText(subtitleFile.jobName)
-                                        tvTypeName.text = subtitleFile.type
+                                        //tvTypeName.text = subtitleFile.type
 
                                         btnCancel.setOnClickListener {
                                             dialog.dismiss()
@@ -213,7 +213,7 @@ class HomeFragment : Fragment() {
 
                                         etFileName.setText(subtitleFile.fileName)
                                         etJobName.setText(subtitleFile.jobName)
-                                        tvTypeName.text = subtitleFile.type
+                                        //tvTypeName.text = subtitleFile.type
 
                                         btnCancel.setOnClickListener {
                                             dialog.dismiss()
@@ -392,7 +392,7 @@ class HomeFragment : Fragment() {
                 }
                 R.id.menu_item_delete_all -> {
                     val dialogBinding =
-                        DialogDeleteAllJobsBinding.inflate(layoutInflater)
+                        DialogDeleteAllWorkBinding.inflate(layoutInflater)
 
                     val dialog = AlertDialog.Builder(requireContext())
                         .setView(dialogBinding.root)
@@ -475,7 +475,7 @@ class HomeFragment : Fragment() {
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
 
-        InterstitialAd.load(requireContext(),"ca-app-pub-3940256099942544/1033173712", adRequest, object : InterstitialAdLoadCallback() {
+        InterstitialAd.load(requireContext(),"ca-app-pub-5025742513609699/4039422320", adRequest, object : InterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
                 Log.d(TAG, "2 onAdFailedToLoad: ")
                 mInterstitialAd = null

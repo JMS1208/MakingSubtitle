@@ -12,6 +12,7 @@
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/app_icon_background.xml" value="0.1465" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/bg_click.xml" value="0.147" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/bg_dialog_btn.xml" value="0.1405" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/bg_dialog_btn_selected.xml" value="0.1165" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/bg_dialog_btn_unselected.xml" value="0.1405" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/bg_dialog_transparent.xml" value="0.1465" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/bg_fading_edge.xml" value="0.1465" />
@@ -70,16 +71,18 @@
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_color_picker2.xml" value="0.2963275643731532" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_delete_all_contents.xml" value="0.2116289012398461" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_delete_all_jobs.xml" value="0.14" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_delete_all_work.xml" value="0.21675929884566053" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_instruction.xml" value="0.1716485507246377" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_scroll_to_item.xml" value="0.33" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_set_job_file_name.xml" value="0.4004106776180698" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_set_job_file_name2.xml" value="0.2" />
-        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_video_url_link.xml" value="0.18" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_video_url_link.xml" value="0.33" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_video_url_link2.xml" value="0.33" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/fragment_exoplayer.xml" value="0.19746376811594202" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/fragment_home.xml" value="0.16" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/fragment_instruction.xml" value="0.25" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/fragment_settings.xml" value="0.25" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/fragment_settings2.xml" value="0.21675929884566053" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/fragment_work_space.xml" value="0.2" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/fragment_youtube.xml" value="0.19791666666666666" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/item_job_list.xml" value="0.2" />

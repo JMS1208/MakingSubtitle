@@ -1185,7 +1185,7 @@ class WorkSpaceFragment : Fragment() {
 
                             addTimeLine(position, TimeLine())
                             val text =
-                                if (position == LAST_LINE_NUM) "마지막" else "${position + 1}"
+                                if (position == LAST_LINE_NUM) getString(R.string.Last) else "${position + 1}"
                             MakeToast(requireContext(), getString(R.string.lineAdded, text))
                             dialog.dismiss()
                         }
@@ -1325,7 +1325,7 @@ class WorkSpaceFragment : Fragment() {
 
 
                             if (position > args.subtitleJob.contents.timeLines.lastIndex) {
-                                MakeToast(requireContext(), "숫자가 너무 큽니다")
+                                MakeToast(requireContext(), getString(R.string.numberIsTooBig))
                             } else {
                                 dialog.dismiss()
                                 if (position == LAST_LINE_NUM) {

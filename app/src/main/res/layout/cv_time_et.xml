@@ -21,7 +21,7 @@
         android:textColor="@color/mainColor"
         android:imeOptions="actionDone"
         android:selectAllOnFocus="true"
-        android:imeActionLabel="다음"
+        android:imeActionLabel="@string/next"
         />
     <TextView
         android:layout_width="wrap_content"
@@ -45,7 +45,7 @@
         android:textColor="@color/mainColor"
         android:imeOptions="actionDone"
         android:selectAllOnFocus="true"
-        android:imeActionLabel="다음"
+        android:imeActionLabel="@string/next"
         />
     <TextView
         android:layout_width="wrap_content"
@@ -69,7 +69,7 @@
         android:textColor="@color/mainColor"
         android:imeOptions="actionDone"
         android:selectAllOnFocus="true"
-        android:imeActionLabel="다음"
+        android:imeActionLabel="@string/next"
         />
     <TextView
         android:layout_width="wrap_content"
@@ -93,7 +93,7 @@
         android:textColor="@color/mainColor"
         android:imeOptions="actionDone"
         android:selectAllOnFocus="true"
-        android:imeActionLabel="완료"
+        android:imeActionLabel="@string/completed"
         />
 
 </LinearLayout>

@@ -4,46 +4,50 @@
 
     <item
         android:id="@+id/menu_item_settings_work_space"
-        android:title="설정"
+        android:title="@string/settings"
         app:showAsAction="never" />
     <item
         android:id="@+id/menu_item_select_video_file"
-        android:title="영상 파일 가져오기"
+        android:title="@string/importVideo"
         app:showAsAction="never" />
     <item
         android:id="@+id/menu_item_select_video_youtube"
-        android:title="유튜브 영상 가져오기"
+        android:title="@string/importYoutubeVideo"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_item_remove_players"
+        android:title="@string/hideVideo"
+        app:showAsAction="never" />
+
     <item
         android:id="@+id/menu_item_select_subtitle"
-        android:title="자막 가져오기"
+        android:title="@string/importSubtitleFile"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_item_export_subtitle_file"
+        android:title="@string/exportSubtitleFile"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/menu_item_delete_contents"
-        android:title="아이템 모두 삭제"
+        android:title="@string/deleteAllItems"
         app:showAsAction="never" />
-    <item
-        android:id="@+id/menu_item_export_subtitle_file"
-        android:title="자막 파일로 저장하기"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/menu_item_remove_players"
-        android:title="영상 없애기"
-        app:showAsAction="never" />
+
     <item
         android:id="@+id/menu_item_add_line"
-        android:title="아이템 추가"
+        android:title="@string/addItem"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menu_item_scroll_line"
-        android:title="해당 번호로 이동"
+        android:title="@string/moveItem"
         app:showAsAction="ifRoom"
         />
 
     <item
         android:id="@+id/menu_item_color_picker"
-        android:title="색상 팔레트"
+        android:title="@string/colorPalette"
         app:showAsAction="ifRoom"
         />
 </menu>

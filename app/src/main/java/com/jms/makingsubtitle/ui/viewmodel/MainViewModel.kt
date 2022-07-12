@@ -102,7 +102,7 @@ class MainViewModel(
             null
         )
 
-        var fileName = "파일명_미지정"
+        var fileName = "file_name"
 
         cursor?.use {
             if (cursor.moveToFirst()) {

@@ -15,10 +15,10 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/menu_item_settings"
-        android:title="설정"
+        android:title="@string/settings"
         app:showAsAction="never" />
     <item
         android:id="@+id/menu_item_delete_all"
-        android:title="모든 작업 삭제" />
+        android:title="@string/DeleteAllWork" />
 
 </menu>
