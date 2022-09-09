@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_70"
+        android:background="@drawable/bg_item"
+        android:paddingStart="@dimen/dp_10"
+        android:paddingTop="@dimen/dp_40"
+        android:paddingEnd="@dimen/dp_10"
+        android:paddingBottom="@dimen/dp_10"
+        app:layout_constraintTop_toTopOf="@id/iv">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/settingWorkNameFileName"
+            android:textSize="@dimen/sp_25"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/comment" />
+
+        <TextView
+            android:id="@+id/comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_20"
+            android:gravity="center_horizontal"
+            android:text="@string/settingWorkNameFileNameComment"
+            android:textSize="@dimen/sp_15"
+            app:layout_constraintTop_toBottomOf="@id/title" />
+
+        <LinearLayout
+            android:id="@+id/ll_job_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_10"
+            android:gravity="start"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/comment">
+
+            <TextView
+                android:id="@+id/tv_job_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/workName2"
+                android:textSize="@dimen/sp_15" />
+
+            <EditText
+                android:id="@+id/et_job_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_10"
+                android:gravity="center"
+                android:hint="@string/settingWorkNameComment"
+                android:textColorHint="@color/blue"
+                android:textSize="@dimen/sp_15" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_file_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_20"
+            android:gravity="start"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/ll_job_name">
+
+            <TextView
+                android:id="@+id/tv_file_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/fileName2"
+                android:textSize="@dimen/sp_15" />
+
+            <EditText
+                android:id="@+id/et_file_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_10"
+                android:gravity="center"
+                android:hint="@string/settingFileNameComment"
+                android:textColorHint="@color/blue"
+                android:textSize="@dimen/sp_15" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_type_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_5"
+            android:gravity="start"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/ll_file_name">
+
+            <TextView
+                android:id="@+id/tv_type_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/type"
+                android:textSize="@dimen/sp_15" />
+
+            <TextView
+                android:id="@+id/et_type_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_15"
+                android:gravity="center"
+                android:text="@string/supportComment"
+                android:textSize="@dimen/sp_15" />
+
+
+        </LinearLayout>
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_select"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_20"
+            android:background="@drawable/bg_dialog_btn_selected"
+            android:elevation="1dp"
+            android:text="@string/Select"
+            android:textColor="@color/always_white"
+            android:textSize="@dimen/sp_15"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn_cancel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ll_type_name" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_20"
+            android:background="@drawable/bg_dialog_btn_unselected"
+            android:elevation="1dp"
+            android:text="@string/cancellation"
+            android:textColor="@color/always_white"
+            android:textSize="@dimen/sp_15"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btn_select"
+            app:layout_constraintTop_toBottomOf="@id/ll_type_name" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/iv"
+        android:layout_width="@dimen/thumbnail"
+        android:layout_height="@dimen/thumbnail"
+        android:src="@drawable/thumbnails"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+

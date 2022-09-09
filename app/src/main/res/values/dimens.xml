@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="line_cube">40dp</dimen>
+    <dimen name="line_text_in_cube">20dp</dimen>
+    <dimen name="btn_auto">25dp</dimen>
+
+    <dimen name="sp_15">15sp</dimen>
+    <dimen name="sp_20">20sp</dimen>
+    <dimen name="sp_25">25sp</dimen>
+    <dimen name="thumbnail">100dp</dimen>
+
+
+    <dimen name="dp_5">5dp</dimen>
+    <dimen name="dp_10">10dp</dimen>
+    <dimen name="dp_15">15dp</dimen>
+    <dimen name="dp_30">30dp</dimen>
+    <dimen name="dp_40">40dp</dimen>
+    <dimen name="dp_50">50dp</dimen>
+    <dimen name="dp_60">60dp</dimen>
+    <dimen name="dp_70">70dp</dimen>
+    <dimen name="dp_500">500dp</dimen>
+    <dimen name="dp_20">20dp</dimen>
+    <dimen name="dp_200">200dp</dimen>
+</resources>

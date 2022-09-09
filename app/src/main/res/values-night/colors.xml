@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="white">#1B1B1B</color>
+
+    <color name="subColor">#C83313</color>
+
+    <color name="lightGrey">#EDEDED</color>
+    <color name="brightGrey">#595959</color>
+    <color name="darkGrey">#363636</color>
+    <color name="yellow">#FAC213</color>
+    <color name="bg_grey">#000000</color>
+    <color name="bg_toolbar">#000000</color>
+    <color name="status_bar">#000000</color>
+    <color name="pressed_color">#7E1D1D</color>
+    <color name="text_grey">#C8C8C8</color>
+    <color name="ticket_day_night">#595959</color>
+    <color name="star">#595959</color>
+    <color name="daynight_black">#C8C8C8</color>
+    <color name="blue">#5795FF</color>
+</resources>
