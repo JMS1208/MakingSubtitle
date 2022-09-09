@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,17 +33,16 @@ import com.jms.makingsubtitle.data.model.SubtitleFile
 import com.jms.makingsubtitle.databinding.DialogDeleteAllWorkBinding
 import com.jms.makingsubtitle.databinding.DialogSetJobFileNameBinding
 import com.jms.makingsubtitle.databinding.FragmentHomeBinding
-import com.jms.makingsubtitle.databinding.ItemJobListBinding
+import com.jms.makingsubtitle.databinding.ItemJobBinding
 import com.jms.makingsubtitle.ui.viewmodel.MainViewModel
 import com.jms.makingsubtitle.util.Contants.DATE_FORMAT
 import com.jms.makingsubtitle.util.Contants.MakeToast
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
-    private val viewModel: MainViewModel by lazy {
-        (activity as MainActivity).viewModel
-    }
+    private val viewModel by viewModels<HomeViewModel>()
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -69,7 +69,7 @@ class HomeFragment : Fragment() {
 
         private var oldSubtitleFileList = listOf<SubtitleFile>()
 
-        inner class ViewHolder(val itemBinding: ItemJobListBinding) :
+        inner class ViewHolder(val itemBinding: ItemJobBinding) :
             RecyclerView.ViewHolder(itemBinding.root) {
 
             fun bind(subtitleFile: SubtitleFile) {
@@ -262,7 +262,7 @@ class HomeFragment : Fragment() {
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val itemBinding = ItemJobListBinding.inflate(layoutInflater, parent, false)
+            val itemBinding = ItemJobBinding.inflate(layoutInflater, parent, false)
             return ViewHolder(itemBinding)
         }
 

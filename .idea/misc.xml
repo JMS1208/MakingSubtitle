@@ -58,6 +58,15 @@
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/switch_track_off.xml" value="0.193" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/switch_track_on.xml" value="0.193" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/switch_track_selector.xml" value="0.193" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/font-v26/noto_sans_kr_black_font_family.xml" value="0.12222222222222222" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/font-v26/noto_sans_kr_bold_font_family.xml" value="0.12222222222222222" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/font-v26/noto_sans_kr_medium_font_family.xml" value="0.12222222222222222" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/font-v26/noto_sans_kr_regular_font_family.xml" value="0.12222222222222222" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/font/dd.xml" value="0.12233549582947173" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/font/noto_sans_kr_black_font_familty.xml" value="0.12233549582947173" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/font/noto_sans_kr_bold_font_family.xml" value="0.12233549582947173" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/font/noto_sans_kr_medium_font_family.xml" value="0.12233549582947173" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/font/noto_sans_kr_regular_font_family.xml" value="0.12233549582947173" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout-land/dialog_color_palette.xml" value="0.14578879863189398" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout-land/dialog_color_picker.xml" value="0.22" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout-land/fragment_.xml" value="0.2535271483539974" />
@@ -85,7 +94,9 @@
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/fragment_settings2.xml" value="0.21675929884566053" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/fragment_work_space.xml" value="0.2" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/fragment_youtube.xml" value="0.19791666666666666" />
-        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/item_job_list.xml" value="0.2" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/item_job.xml" value="0.2864471996579735" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/item_job_list.xml" value="0.33" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/item_line.xml" value="0.23076923076923078" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/item_line_list.xml" value="0.25" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/item_slider.xml" value="0.1716485507246377" />
         <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/menu-v26/menu_home.xml" value="0.25833333333333336" />

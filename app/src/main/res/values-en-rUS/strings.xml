@@ -97,4 +97,6 @@
     <string name="supportComment">Currently only srt supported</string>
     <string name="deleteAllItemsComment">" All items will be deleted. When deleted, it cannot be recovered. Please choose carefully."</string>
     <string name="numberIsTooBig">The number is too big</string>
+    <string name="empty_job_name">Empty_job_name</string>
+    <string name="fetchError">Subtitle File Load Error</string>
 </resources>

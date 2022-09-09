@@ -150,6 +150,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/noticeAddItem"
                     android:gravity="center"
+                    android:fontFamily="@font/noto_sans_kr_medium_font_family"
+                    android:includeFontPadding="false"
                     android:padding="@dimen/dp_10"
                     android:textSize="@dimen/sp_25"
                     />

@@ -24,6 +24,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -58,17 +59,16 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstan
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerCallback
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTubePlayerTracker
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.FileOutputStream
-import java.lang.String
 
-
+@AndroidEntryPoint
 class WorkSpaceFragment : Fragment() {
 
-    private val viewModel: MainViewModel by lazy {
-        (activity as MainActivity).viewModel
-    }
+    private val viewModel by viewModels<WorkSpaceViewModel>()
+
     private val args by navArgs<WorkSpaceFragmentArgs>()
     private var exoplayer: ExoPlayer? = null
 
@@ -392,7 +392,7 @@ class WorkSpaceFragment : Fragment() {
 
         private var oldTimeLineList = mutableListOf<TimeLine>()
 
-        inner class ViewHolder(val itemBinding: ItemLineListBinding) :
+        inner class ViewHolder(val itemBinding: ItemLineBinding) :
             RecyclerView.ViewHolder(itemBinding.root) {
 
             lateinit var timeLine: TimeLine
@@ -493,7 +493,6 @@ class WorkSpaceFragment : Fragment() {
                                 }
                                 R.id.menu_item_paste_line -> {
                                     copiedTimeLine?.let {
-                                        //args.subtitleJob.contents.timeLines[absoluteAdapterPosition] = it
                                         val viewHolder =
                                             binding.timelinesRv.findViewHolderForAdapterPosition(
                                                 absoluteAdapterPosition
@@ -501,7 +500,6 @@ class WorkSpaceFragment : Fragment() {
 
                                         (viewHolder as ViewHolder).bind(it)
 
-                                        //viewModel.updateSubtitleFile(args.subtitleJob)
 
                                     } ?: MakeToast(
                                         requireContext(),
@@ -669,9 +667,9 @@ class WorkSpaceFragment : Fragment() {
                                     val startTime = (tracker.currentSecond * 1000).toLong()
                                     args.subtitleJob.contents.timeLines[absoluteAdapterPosition].startTime =
                                         VideoTime(startTime)
-                                    //startTimeEt.setVideoTime(VideoTime(startTime))
+
                                     bind(args.subtitleJob.contents.timeLines[absoluteAdapterPosition])
-                                    //viewModel.updateSubtitleFile(args.subtitleJob)
+
                                     generateVibration()
                                     YoYo.with(Techniques.RubberBand)
                                         .duration(500)
@@ -707,9 +705,9 @@ class WorkSpaceFragment : Fragment() {
                             binding.exoVv.player?.let { player ->
                                 args.subtitleJob.contents.timeLines[absoluteAdapterPosition].endTime =
                                     VideoTime(player.currentPosition)
-                                //endTimeEt.setVideoTime(VideoTime(it.currentPosition))
+
                                 bind(args.subtitleJob.contents.timeLines[absoluteAdapterPosition])
-                                //viewModel.updateSubtitleFile(args.subtitleJob)
+
                                 generateVibration()
                                 YoYo.with(Techniques.RubberBand)
                                     .duration(500)
@@ -725,9 +723,9 @@ class WorkSpaceFragment : Fragment() {
 
                                     args.subtitleJob.contents.timeLines[absoluteAdapterPosition].endTime =
                                         VideoTime(endTime)
-                                    //endTimeEt.setVideoTime(VideoTime(endTime))
+
                                     bind(args.subtitleJob.contents.timeLines[absoluteAdapterPosition])
-                                    //viewModel.updateSubtitleFile(args.subtitleJob)
+
                                     generateVibration()
                                     YoYo.with(Techniques.RubberBand)
                                         .duration(500)
@@ -787,7 +785,7 @@ class WorkSpaceFragment : Fragment() {
 
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val itemBinding = ItemLineListBinding.inflate(layoutInflater, parent, false)
+            val itemBinding = ItemLineBinding.inflate(layoutInflater, parent, false)
             return ViewHolder(itemBinding)
         }
 
@@ -837,20 +835,10 @@ class WorkSpaceFragment : Fragment() {
             val displayMetrics = DisplayMetrics()
 
             display.getMetrics(displayMetrics)
-            val displayWidth = displayMetrics.widthPixels
-            val displayHeight = displayMetrics.heightPixels
             val layoutParams = WindowManager.LayoutParams()
             layoutParams.copyFrom(dialog.window!!.attributes)
 
             dialog.window?.apply {
-                attributes = layoutParams.apply {
-//                    if(display.rotation == Surface.ROTATION_0) { // 일반적인 세로모드
-//                        layoutParams.width = (displayWidth * 0.7).toInt()
-//                    } else { // 가로모드
-//                        layoutParams.width = (displayWidth * 0.9).toInt()
-//                    }
-
-                }
                 setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             }
 
@@ -982,20 +970,6 @@ class WorkSpaceFragment : Fragment() {
                     true
                 }
 
-//                R.id.menu_item_select_subtitle_euc_kr -> { //기존 자막파일 가져오기
-//                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-//                        addCategory(Intent.CATEGORY_OPENABLE)
-//                        type = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-//                            "application/x-subrip"
-//                        else
-//                            "application/octet-stream"
-//                    }
-//
-//
-//                    startActivityForResult(intent, REQUEST_SUBTITLE_EUC_KR)
-//
-//                    true
-//                }
 
                 R.id.menu_item_select_subtitle -> { //기존 자막파일 가져오기
                     val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
@@ -1150,10 +1124,6 @@ class WorkSpaceFragment : Fragment() {
 
                     dialogBinding.apply {
 
-//                        btnAddLine.setOnClickListener {
-//                            addTimeLine()
-//                            dialog.dismiss()
-//                        }
                         btnAddLine.setOnClickListener {
                             val position: Int =
                                 if (etLineNum.text.isBlank()) {
@@ -1298,10 +1268,7 @@ class WorkSpaceFragment : Fragment() {
 
                     dialogBinding.apply {
 
-//                        btnAddLine.setOnClickListener {
-//                            addTimeLine()
-//                            dialog.dismiss()
-//                        }
+
                         btnMoveLine.setOnClickListener {
                             val position: Int = if (etLineNum.text.isBlank()) {
                                 LAST_LINE_NUM
@@ -1550,7 +1517,6 @@ class WorkSpaceFragment : Fragment() {
 
                 }
 
-                //TODO 애니메이션
             }
         }
 
@@ -1604,14 +1570,6 @@ class WorkSpaceFragment : Fragment() {
                         viewModel.loadSubtitleFileUri(uri, args.subtitleJob)
                     }
                 }
-
-//                REQUEST_SUBTITLE_EUC_KR -> {
-//                    data?.let {
-//                        val uri = it.data
-//
-//                        viewModel.loadSubtitleFileUri(uri, args.subtitleJob, "EUC-KR")
-//                    }
-//                }
 
                 REQUEST_EXPORT_FILE -> {
                     data?.let {

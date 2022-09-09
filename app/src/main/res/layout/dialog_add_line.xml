@@ -24,6 +24,8 @@
             android:text="@string/addItem"
             android:gravity="center_horizontal"
             android:textSize="@dimen/sp_25"
+            android:fontFamily="@font/noto_sans_kr_medium_font_family"
+            android:includeFontPadding="false"
             app:layout_constraintBottom_toTopOf="@id/comment"
             android:textStyle="bold"
             />
@@ -35,6 +37,8 @@
             android:gravity="center_horizontal"
             android:text="@string/addItemComment"
             android:textSize="@dimen/sp_15"
+            android:fontFamily="@font/noto_sans_kr_regular_font_family"
+            android:includeFontPadding="false"
             app:layout_constraintTop_toBottomOf="@id/title"
             android:layout_marginTop="@dimen/dp_20"
             />
@@ -56,6 +60,8 @@
                 android:digits="0123456789"
                 android:gravity="center"
                 android:textSize="@dimen/sp_15"
+                android:fontFamily="@font/noto_sans_kr_regular_font_family"
+                android:includeFontPadding="false"
                 android:textColorHint="@color/blue"
                 />
 
@@ -65,6 +71,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/addComment"
                 android:gravity="center"
+                android:fontFamily="@font/noto_sans_kr_regular_font_family"
+                android:includeFontPadding="false"
                 android:textSize="@dimen/sp_15"
                 />
         </LinearLayout>
@@ -77,6 +85,8 @@
             android:layout_height="wrap_content"
             android:text="@string/add"
             android:textStyle="bold"
+            android:fontFamily="@font/noto_sans_kr_medium_font_family"
+            android:includeFontPadding="false"
             android:background="@drawable/bg_dialog_btn_selected"
             android:textColor="@color/always_white"
             android:textSize="@dimen/sp_15"
@@ -96,6 +106,8 @@
             android:background="@drawable/bg_dialog_btn_unselected"
             android:textColor="@color/always_white"
             android:textSize="@dimen/sp_15"
+            android:fontFamily="@font/noto_sans_kr_medium_font_family"
+            android:includeFontPadding="false"
             app:layout_constraintStart_toEndOf="@id/btn_add_line"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_margin="@dimen/dp_20"

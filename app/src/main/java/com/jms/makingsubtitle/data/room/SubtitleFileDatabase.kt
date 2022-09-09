@@ -19,27 +19,27 @@ abstract class SubtitleFileDatabase : RoomDatabase() {
 
 
 
-    companion object {
-        @Volatile
-        private var INSTANCE: SubtitleFileDatabase? = null
+//    companion object {
+//        @Volatile
+//        private var INSTANCE: SubtitleFileDatabase? = null
+//
 
+//        val moshi = Moshi.Builder()
+//            .addLast(KotlinJsonAdapterFactory())
+//            .build()
 
-        val moshi = Moshi.Builder()
-            .addLast(KotlinJsonAdapterFactory())
-            .build()
-
-        private fun buildDatabase(context: Context): SubtitleFileDatabase =
-            Room.databaseBuilder(
-                context.applicationContext,
-                SubtitleFileDatabase::class.java,
-                "subtitle-fileList"
-            ).addTypeConverter(SubtitleFileTypeConverter(moshi)).build()
-
-        fun getInstance(context: Context): SubtitleFileDatabase =
-            INSTANCE ?: synchronized(SubtitleFileDatabase::class.java) {
-                INSTANCE ?: buildDatabase(context).also {
-                    INSTANCE = it
-                }
-            }
-    }
+//        private fun buildDatabase(context: Context): SubtitleFileDatabase =
+//            Room.databaseBuilder(
+//                context.applicationContext,
+//                SubtitleFileDatabase::class.java,
+//                "subtitle-fileList"
+//            ).addTypeConverter(SubtitleFileTypeConverter(moshi)).build()
+//
+//        fun getInstance(context: Context): SubtitleFileDatabase =
+//            INSTANCE ?: synchronized(SubtitleFileDatabase::class.java) {
+//                INSTANCE ?: buildDatabase(context).also {
+//                    INSTANCE = it
+//                }
+//            }
+//    }
 }

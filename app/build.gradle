@@ -5,6 +5,7 @@ plugins {
     //parcelable 보일러 플레이트 코드 대신 작성해줌
     id 'kotlin-parcelize'
     id 'androidx.navigation.safeargs.kotlin'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -70,6 +71,7 @@ dependencies {
 
     // For youtube Url Extractor
     implementation 'com.github.HaarigerHarald:android-youtubeExtractor:master-SNAPSHOT'
+
     // ExoPlayer
     implementation 'com.google.android.exoplayer:exoplayer:2.18.0'
     implementation 'com.google.android.exoplayer:exoplayer-core:2.18.0'
@@ -93,7 +95,6 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.4.2'
     implementation 'androidx.navigation:navigation-ui-ktx:2.4.2'
 
-
     //GSon
     implementation 'com.google.code.gson:gson:2.8.6'
 
@@ -110,6 +111,9 @@ dependencies {
     //YoutubePlayer-OpenSource
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:11.0.1'
 
+    //ViewModel Delegate
+    implementation("androidx.activity:activity-ktx:1.5.1")
+    implementation("androidx.fragment:fragment-ktx:1.5.1")
 
     //AdMob
     implementation 'com.google.android.gms:play-services-ads:21.0.0'
@@ -120,4 +124,9 @@ dependencies {
     //ColorPicker-OpenSource
     implementation 'com.github.duanhong169:colorpicker:1.1.6'
     implementation 'com.github.duanhong169:checkerboarddrawable:1.0.2'
+
+    //Hilt
+    implementation("com.google.dagger:hilt-android:2.42")
+    implementation("androidx.hilt:hilt-common:1.0.0")
+    kapt("com.google.dagger:hilt-compiler:2.42")
 }

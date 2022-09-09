@@ -33,13 +33,15 @@
 
             <TextView
                 android:id="@+id/index_tv"
-                android:layout_width="@dimen/line_cube"
-                android:layout_height="@dimen/line_cube"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:gravity="center"
-                android:background="@drawable/ic_cube"
                 android:textSize="@dimen/line_text_in_cube"
                 android:textColor="@color/black"
-                android:text="1" />
+                android:text="1"
+                android:fontFamily="@font/noto_sans_kr_medium_font_family"
+                android:includeFontPadding="false"
+                />
         </FrameLayout>
 
 
@@ -63,6 +65,8 @@
             android:layout_height="wrap_content"
             android:text="@string/start"
             android:textSize="@dimen/sp_20"
+            android:fontFamily="@font/noto_sans_kr_medium_font_family"
+            android:includeFontPadding="false"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/start_time_et"
             app:layout_constraintStart_toStartOf="@id/start_time_et"
@@ -97,6 +101,8 @@
             android:id="@+id/tv_end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/noto_sans_kr_medium_font_family"
+            android:includeFontPadding="false"
             android:text="@string/end"
             android:textSize="@dimen/sp_20"
             app:layout_constraintTop_toTopOf="parent"

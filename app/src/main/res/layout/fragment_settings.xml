@@ -15,6 +15,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:buttonGravity="center_vertical"
         android:background="@color/white"
+
         />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -35,6 +36,8 @@
             android:layout_height="wrap_content"
             android:text="@string/SettingsTheme"
             android:textSize="20sp"
+            android:fontFamily="@font/noto_sans_kr_medium_font_family"
+            android:includeFontPadding="false"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             />
@@ -45,6 +48,8 @@
             android:layout_height="wrap_content"
             android:text="@string/themeExplains"
             android:textSize="14sp"
+            android:fontFamily="@font/noto_sans_kr_regular_font_family"
+            android:includeFontPadding="false"
             android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/tv_theme_mode"
             app:layout_constraintStart_toStartOf="parent"
@@ -68,6 +73,8 @@
                 android:layout_height="wrap_content"
                 android:theme="@style/MyRadioButton"
                 android:textColor="@color/text_grey"
+                android:fontFamily="@font/noto_sans_kr_regular_font_family"
+                android:includeFontPadding="false"
                 android:text="@string/defaultMode" />
             <RadioButton
                 android:id="@+id/rb_light"
@@ -75,6 +82,8 @@
                 android:layout_height="wrap_content"
                 android:theme="@style/MyRadioButton"
                 android:textColor="@color/text_grey"
+                android:fontFamily="@font/noto_sans_kr_regular_font_family"
+                android:includeFontPadding="false"
                 android:text="@string/lightMode" />
 
             <RadioButton
@@ -83,6 +92,8 @@
                 android:layout_height="wrap_content"
                 android:theme="@style/MyRadioButton"
                 android:textColor="@color/text_grey"
+                android:fontFamily="@font/noto_sans_kr_regular_font_family"
+                android:includeFontPadding="false"
                 android:text="@string/darkMode" />
         </RadioGroup>
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -107,6 +118,8 @@
             android:layout_height="wrap_content"
             android:text="@string/SettingsTimeLeaf"
             android:textSize="20sp"
+            android:fontFamily="@font/noto_sans_kr_medium_font_family"
+            android:includeFontPadding="false"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             />
@@ -116,6 +129,8 @@
             android:layout_height="wrap_content"
             android:text="@string/leafExplains"
             android:textSize="14sp"
+            android:fontFamily="@font/noto_sans_kr_regular_font_family"
+            android:includeFontPadding="false"
             android:layout_marginTop="5dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_leaf_time"
@@ -137,6 +152,8 @@
                 android:layout_height="wrap_content"
                 android:theme="@style/MyRadioButton"
                 android:text="@string/onesec"
+                android:fontFamily="@font/noto_sans_kr_regular_font_family"
+                android:includeFontPadding="false"
                 android:textColor="@color/text_grey"/>
             <RadioButton
                 android:id="@+id/rb_leaf_time_3"
@@ -144,6 +161,8 @@
                 android:layout_height="wrap_content"
                 android:theme="@style/MyRadioButton"
                 android:text="@string/threesec"
+                android:fontFamily="@font/noto_sans_kr_regular_font_family"
+                android:includeFontPadding="false"
                 android:textColor="@color/text_grey"/>
 
             <RadioButton
@@ -152,6 +171,8 @@
                 android:layout_height="wrap_content"
                 android:theme="@style/MyRadioButton"
                 android:text="@string/fivesec"
+                android:fontFamily="@font/noto_sans_kr_regular_font_family"
+                android:includeFontPadding="false"
                 android:textColor="@color/text_grey"
                 />
             <RadioButton
@@ -160,6 +181,8 @@
                 android:layout_height="wrap_content"
                 android:theme="@style/MyRadioButton"
                 android:text="@string/sevensec"
+                android:fontFamily="@font/noto_sans_kr_regular_font_family"
+                android:includeFontPadding="false"
                 android:textColor="@color/text_grey"
                 />
             <RadioButton
@@ -168,6 +191,8 @@
                 android:layout_height="wrap_content"
                 android:theme="@style/MyRadioButton"
                 android:text="@string/tensec"
+                android:fontFamily="@font/noto_sans_kr_regular_font_family"
+                android:includeFontPadding="false"
                 android:textColor="@color/text_grey"
                 />
         </RadioGroup>
@@ -190,6 +215,8 @@
             android:layout_height="wrap_content"
             android:text="@string/vibration"
             android:textSize="20sp"
+            android:fontFamily="@font/noto_sans_kr_medium_font_family"
+            android:includeFontPadding="false"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             />
@@ -200,6 +227,8 @@
             android:text="@string/vibrationOptionsExplains"
             android:maxLines="2"
             android:textSize="14sp"
+            android:fontFamily="@font/noto_sans_kr_regular_font_family"
+            android:includeFontPadding="false"
             android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/tv_vibration_options"
             app:layout_constraintStart_toStartOf="parent"
@@ -211,6 +240,8 @@
             android:layout_height="wrap_content"
             android:text="@string/setVibration"
             android:checked="true"
+            android:fontFamily="@font/noto_sans_kr_regular_font_family"
+            android:includeFontPadding="false"
             android:track="@drawable/switch_track_selector"
             android:thumb="@drawable/switch_thumb_selector"
             app:layout_constraintTop_toBottomOf="@id/tv_vibration_options_explains"
@@ -240,6 +271,8 @@
             android:layout_height="wrap_content"
             android:text="@string/appInstructions"
             android:textSize="20sp"
+            android:fontFamily="@font/noto_sans_kr_medium_font_family"
+            android:includeFontPadding="false"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             />
@@ -250,6 +283,8 @@
             android:text="@string/appInstructionsExplains"
             android:maxLines="2"
             android:textSize="14sp"
+            android:fontFamily="@font/noto_sans_kr_regular_font_family"
+            android:includeFontPadding="false"
             android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@id/tv_show_options"
             app:layout_constraintStart_toStartOf="parent"
@@ -262,6 +297,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/InstructionDialogShowNow"
+            android:fontFamily="@font/noto_sans_kr_regular_font_family"
+            android:includeFontPadding="false"
             app:layout_constraintTop_toBottomOf="@id/tv_show_options_explains"
             app:layout_constraintEnd_toEndOf="parent"
             />
@@ -287,28 +324,21 @@
             android:layout_height="wrap_content"
             android:text="@string/license"
             android:textSize="20sp"
+            android:fontFamily="@font/noto_sans_kr_medium_font_family"
+            android:includeFontPadding="false"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             />
-        <TextView
-            android:id="@+id/tv_license_explains"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/appInstructionsExplains"
-            android:maxLines="2"
-            android:textSize="14sp"
-            android:layout_marginTop="5dp"
-            android:visibility="invisible"
-            app:layout_constraintTop_toBottomOf="@id/tv_license"
-            app:layout_constraintStart_toStartOf="parent"
-            />
+
 
         <TextView
             android:id="@+id/btn_license"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/showLicense"
-            app:layout_constraintTop_toBottomOf="@id/tv_license_explains"
+            android:fontFamily="@font/noto_sans_kr_regular_font_family"
+            android:includeFontPadding="false"
+            app:layout_constraintTop_toBottomOf="@id/tv_license"
             app:layout_constraintEnd_toEndOf="parent"
             />
 

@@ -47,8 +47,8 @@
     <string name="timeLineEtComment">자막을 입력해주세요\n내용이 비어있으면 파일 생성시 자동삭제됩니다</string>
     <string name="linkComment">유튜브 링크를 입력해주세요</string>
     <string name="linkExample" translatable="false">https://www.youtube.com</string>
-    <string name="start" translatable="false">start</string>
-    <string name="end" translatable="false">end</string>
+    <string name="start" translatable="false">Start</string>
+    <string name="end" translatable="false">End</string>
     <string name="noticeLineNum">0보다 큰 숫자를 입력해주세요</string>
     <string name="lineAdded">%s에 아이템이 추가되었습니다</string>
     <string name="noticeDelete">\'삭제한다\'를 입력해주세요</string>
@@ -269,4 +269,6 @@ that this copyright notice remain intact.\n
     <string name="supportComment">현재 srt 만 지원됩니다</string>
     <string name="deleteAllItemsComment">모든 아이템을 삭제합니다 삭제시 복구할 수 없습니다 신중히 결정해주세요</string>
     <string name="numberIsTooBig">숫자가 너무 큽니다</string>
+    <string name="empty_job_name">작업명_미지정</string>
+    <string name="fetchError">자막 파일을 읽을 수 없습니다</string>
 </resources>

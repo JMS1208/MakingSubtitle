@@ -27,6 +27,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Color Reference"
+                android:fontFamily="@font/noto_sans_kr_medium_font_family"
+                android:includeFontPadding="false"
                 android:gravity="center_horizontal"
                 android:textSize="@dimen/sp_25"
                 android:textStyle="bold"
@@ -69,6 +71,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/colorReferenceComment"
                 android:gravity="center_horizontal"
+                android:fontFamily="@font/noto_sans_kr_regular_font_family"
+                android:includeFontPadding="false"
                 android:textSize="@dimen/sp_15"
                 android:padding="@dimen/dp_10"
                 />
@@ -81,6 +85,8 @@
                 android:textSize="@dimen/sp_15"
                 android:textColorHint="@color/mainColor"
                 android:text="#DA1212"
+                android:fontFamily="@font/noto_sans_kr_regular_font_family"
+                android:includeFontPadding="false"
                 android:textColor="@color/mainColor"
                 android:background="@android:color/transparent"
                 android:padding="@dimen/dp_10"
@@ -98,6 +104,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/copy2"
                     android:textStyle="bold"
+                    android:fontFamily="@font/noto_sans_kr_medium_font_family"
+                    android:includeFontPadding="false"
                     android:background="@drawable/bg_dialog_btn_selected"
                     android:textColor="@color/always_white"
                     android:textSize="@dimen/sp_15"
@@ -116,6 +124,8 @@
                     android:textSize="@dimen/sp_15"
                     android:layout_margin="@dimen/dp_20"
                     android:elevation="1dp"
+                    android:fontFamily="@font/noto_sans_kr_medium_font_family"
+                    android:includeFontPadding="false"
                     />
 
             </LinearLayout>
