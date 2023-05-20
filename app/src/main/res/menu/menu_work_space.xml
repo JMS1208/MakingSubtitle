@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_item_settings_work_space"
+        android:title="@string/settings"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_item_select_video_file"
+        android:title="@string/importVideo"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_item_select_video_youtube"
+        android:title="@string/importYoutubeVideo"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_item_remove_players"
+        android:title="@string/hideVideo"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_item_select_subtitle"
+        android:title="@string/importSubtitleFile"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_item_export_subtitle_file"
+        android:title="@string/exportSubtitleFile"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_item_delete_contents"
+        android:title="@string/deleteAllItems"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_item_add_line"
+        android:title="@string/addItem"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menu_item_scroll_line"
+        android:title="@string/moveItem"
+        app:showAsAction="ifRoom"
+        />
+
+    <item
+        android:id="@+id/menu_item_color_picker"
+        android:title="@string/colorPalette"
+        app:showAsAction="ifRoom"
+        />
+</menu>

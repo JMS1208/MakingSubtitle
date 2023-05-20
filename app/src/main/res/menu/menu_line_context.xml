@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_item_copy_line"
+        android:title="@string/copy" />
+    <item
+        android:id="@+id/menu_item_paste_line"
+        android:title="@string/paste" />
+    <item
+        android:id="@+id/menu_item_add_upper_line"
+        android:title="@string/addItemAbove" />
+    <item
+        android:id="@+id/menu_item_add_lower_line"
+        android:title="@string/addItemBelow" />
+</menu>

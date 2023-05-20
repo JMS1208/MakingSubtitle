@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable-sw720dp/bg_fading_edge_bottom .xml" value="0.1255" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable-sw720dp/ic_backward.xml" value="0.168" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable-sw720dp/ic_forward.xml" value="0.168" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable-sw720dp/ic_pause.xml" value="0.1405" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable-sw720dp/ic_play.xml" value="0.168" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable-v24/dotted_line_yellow.xml" value="0.1715" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/app_icon_background.xml" value="0.1465" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/bg_click.xml" value="0.147" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/bg_dialog_btn.xml" value="0.1405" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/bg_dialog_btn_selected.xml" value="0.1165" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/bg_dialog_btn_unselected.xml" value="0.1405" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/bg_dialog_transparent.xml" value="0.1465" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/bg_fading_edge.xml" value="0.1465" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/bg_fading_edge_bottom.xml" value="0.1255" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/bg_gradient.xml" value="0.168" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/bg_indicator_activate.xml" value="0.1465" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/bg_indicator_inactive.xml" value="0.1465" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/bg_item.xml" value="0.1465" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/bg_job_item.xml" value="0.158" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/bg_radius.xml" value="0.2095" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/bg_rounded_box.xml" value="0.2625" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/bg_rounded_yellow_boc.xml" value="0.121" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/bg_ticket.xml" value="0.191" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/btn_image_resume.xml" value="0.1" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/dotted_line.xml" value="0.184" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/ic_add_24.xml" value="0.2155" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/ic_arrow_left_24.xml" value="0.1465" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/ic_arrow_right_24.xml" value="0.1465" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/ic_auto.xml" value="0.1255" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/ic_auto_24.xml" value="0.1465" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/ic_back_24.xml" value="0.1465" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/ic_backward.xml" value="0.168" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/ic_backward_24.xml" value="0.1675" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/ic_forward.xml" value="0.1405" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/ic_forward_24.xml" value="0.1465" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/ic_forward_5_24.xml" value="0.1675" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/ic_hyphen_24.xml" value="0.1" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/ic_pause_24.xml" value="0.1465" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/ic_play.xml" value="0.1405" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/ic_play_24.xml" value="0.1465" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/ic_search_24.xml" value="0.2155" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/ic_star.xml" value="0.205" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/pressed_bg_color.xml" value="0.214" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/rippe_effect_button.xml" value="0.2095" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/ripple_effect.xml" value="0.2095" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/shape_stroke_bg.xml" value="0.1235" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/stroke_bg_grey.xml" value="0.132" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/stroke_bg_orange.xml" value="0.132" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/stroke_bg_white.xml" value="0.1235" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/switch_thumb.xml" value="0.193" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/switch_thumb_off.xml" value="0.1405" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/switch_thumb_selector.xml" value="0.1405" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/switch_track_off.xml" value="0.193" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/switch_track_on.xml" value="0.193" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/drawable/switch_track_selector.xml" value="0.193" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/font-v26/noto_sans_kr_black_font_family.xml" value="0.12222222222222222" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/font-v26/noto_sans_kr_bold_font_family.xml" value="0.12222222222222222" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/font-v26/noto_sans_kr_medium_font_family.xml" value="0.12222222222222222" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/font-v26/noto_sans_kr_regular_font_family.xml" value="0.12222222222222222" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/font/dd.xml" value="0.12233549582947173" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/font/noto_sans_kr_black_font_familty.xml" value="0.12233549582947173" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/font/noto_sans_kr_bold_font_family.xml" value="0.12233549582947173" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/font/noto_sans_kr_medium_font_family.xml" value="0.12233549582947173" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/font/noto_sans_kr_regular_font_family.xml" value="0.12233549582947173" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout-land/dialog_color_palette.xml" value="0.14578879863189398" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout-land/dialog_color_picker.xml" value="0.22" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout-land/fragment_.xml" value="0.2535271483539974" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout-land/fragment_work_space.xml" value="0.17537942664418213" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/activity_main.xml" value="0.1875" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/activity_tutorial.xml" value="0.25" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/cv_time_et.xml" value="0.26358695652173914" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_add_line.xml" value="0.33" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_add_line2.xml" value="0.18" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_color_picker.xml" value="0.25" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_color_picker2.xml" value="0.2963275643731532" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_delete_all_contents.xml" value="0.2116289012398461" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_delete_all_jobs.xml" value="0.14" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_delete_all_work.xml" value="0.21675929884566053" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_instruction.xml" value="0.1716485507246377" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_scroll_to_item.xml" value="0.33" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_set_job_file_name.xml" value="0.4004106776180698" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_set_job_file_name2.xml" value="0.2" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_video_url_link.xml" value="0.33" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/dialog_video_url_link2.xml" value="0.33" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/fragment_exoplayer.xml" value="0.19746376811594202" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/fragment_home.xml" value="0.16" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/fragment_instruction.xml" value="0.25" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/fragment_settings.xml" value="0.25" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/fragment_settings2.xml" value="0.21675929884566053" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/fragment_work_space.xml" value="0.2" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/fragment_youtube.xml" value="0.19791666666666666" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/item_job.xml" value="0.2864471996579735" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/item_job_list.xml" value="0.33" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/item_line.xml" value="0.23076923076923078" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/item_line_list.xml" value="0.25" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/layout/item_slider.xml" value="0.1716485507246377" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/menu-v26/menu_home.xml" value="0.25833333333333336" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/menu/menu_home.xml" value="0.25" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/menu/menu_home_context.xml" value="0.2824074074074074" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/menu/menu_line_context.xml" value="0.19114583333333332" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/menu/menu_work_space.xml" value="0.365625" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/mipmap-anydpi-v26/app_icon.xml" value="0.1465" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/mipmap-anydpi-v26/app_icon_round.xml" value="0.1465" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/mipmap-anydpi-v26/ic_auto_png.xml" value="0.1255" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/mipmap-anydpi-v26/ic_auto_png_round.xml" value="0.1255" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1465" />
+        <entry key="..\:/MyAndroid/MakingSubTitle/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1465" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

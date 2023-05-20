@@ -1,0 +1,274 @@
+<resources>
+    <string name="app_name">SubTitle</string>
+    <string name="menu_search_text">작업검색</string>
+    <string name="menu_add_text">작업추가</string>
+    <string name="jobName">작업명</string>
+    <string name="bornDate">작업 생성일자</string>
+    <string name="lastUpdate">마지막 수정일자</string>
+    <string name="fileName">저장할 파일명</string>
+    <string name="ok">확인</string>
+    <string name="setupFileName">file_name</string>
+    <string name="searchJobName">작업명으로 검색</string>
+    <string name="updated">업데이트 완료</string>
+    <string name="deleted">삭제 완료</string>
+    <string name="cancellation">취소</string>
+    <string name="copied">복사 되었습니다</string>
+    <string name="nothingCopied">복사한 내용이 없습니다</string>
+    <string name="added">추가되었습니다</string>
+    <string name="requestLink">링크를 입력해주세요</string>
+    <string name="thumbnailBaseUrl" translatable="false">https://img.youtube.com/vi/%s/default.jpg</string>
+    <string name="getVideoFailed">영상을 가져오는 데 실패하였습니다</string>
+    <string name="SettingsTimeLeaf">동영상 건너뛰기 시간</string>
+    <string name="SettingsTheme">테마</string>
+    <string name="settingFileName">파일명 지정하기</string>
+    <string name="settingWorkName">작업명 지정하기</string>
+    <string name="deleteWork">작업 삭제하기</string>
+
+    <string name="doNotShowMe">다시 보지 않기</string>
+    <string name="close">닫기</string>
+    <string name="defaultMode">기본 모드</string>
+    <string name="lightMode">라이트 모드</string>
+    <string name="darkMode">다크 모드</string>
+    <string name="themeExplains">앱의 테마 색상을 설정합니다</string>
+    <string name="leafExplains">영상 이동시간을 설정합니다</string>
+    <string name="onesec">1초</string>
+    <string name="threesec">3초</string>
+    <string name="fivesec">5초</string>
+    <string name="sevensec">7초</string>
+    <string name="tensec">10초</string>
+
+    <string name="appInstructions">튜토리얼</string>
+    <string name="floatInstructions">앱 실행시 띄우기</string>
+    <string name="InstructionDialogShowNow">지금 보기</string>
+    <string name="appInstructionsExplains">앱 튜토리얼을 보여줍니다</string>
+    <string name="vibrationOptionsExplains">버튼 클릭시 진동을 울릴지 설정합니다</string>
+    <string name="setVibration">진동 켜기</string>
+    <string name="vibration">진동</string>
+    <string name="timeLineEtComment">자막을 입력해주세요\n내용이 비어있으면 파일 생성시 자동삭제됩니다</string>
+    <string name="linkComment">유튜브 링크를 입력해주세요</string>
+    <string name="linkExample" translatable="false">https://www.youtube.com</string>
+    <string name="start" translatable="false">Start</string>
+    <string name="end" translatable="false">End</string>
+    <string name="noticeLineNum">0보다 큰 숫자를 입력해주세요</string>
+    <string name="lineAdded">%s에 아이템이 추가되었습니다</string>
+    <string name="noticeDelete">\'삭제한다\'를 입력해주세요</string>
+    <string name="deleteComment">삭제한다</string>
+    <string name="fileGenerated">자막파일이 생성되었습니다</string>
+    <string name="colorCopied">클립보드에 복사되었습니다</string>
+    <string name="noticeAddItem">아이템을 추가해주세요</string>
+    <string name="noticeAddJob">작업을 추가해주세요</string>
+    <string name="license">라이센스</string>
+    <string name="showLicense">전문 보기</string>
+    <string name="btnSkip">건너뛰기</string>
+    <string name="tutorialComment">튜토리얼은 설정 화면에서 다시 보실 수 있습니다</string>
+    <string name="licenseContents" translatable="false">
+1. ColorPicker\n
+(https://github.com/duanhong169/ColorPicker)\n
+   Copyright 2018 Hong Duan\n
+
+   Licensed under the Apache License, Version 2.0 (the "License");\n
+   you may not use this file except in compliance with the License.\n
+   You may obtain a copy of the License at\n
+
+       http://www.apache.org/licenses/LICENSE-2.0\n
+
+   Unless required by applicable law or agreed to in writing, software\n
+   distributed under the License is distributed on an "AS IS" BASIS,\n
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n
+   See the License for the specific language governing permissions and\n
+   limitations under the License.\n
+\n
+2. AndroidViewAnimations\n
+(https://github.com/daimajia/AndroidViewAnimations)\n
+\n
+The MIT License (MIT)\n
+
+Copyright © 2014 daimajia\n
+
+Permission is hereby granted, free of charge, to any person obtaining a copy\n
+of this software and associated documentation files (the "Software"), to deal\n
+in the Software without restriction, including without limitation the rights\n
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n
+copies of the Software, and to permit persons to whom the Software is\n
+furnished to do so, subject to the following conditions:\n
+
+The above copyright notice and this permission notice shall be included in all\n
+copies or substantial portions of the Software.\n
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n
+SOFTWARE.\n
+\n
+3. android-youtube-player\n
+(https://github.com/PierfrancescoSoffritti/android-youtube-player)\n
+
+MIT License\n
+
+Copyright © 2018 Pierfrancesco Soffritti\n
+
+Permission is hereby granted, free of charge, to any person obtaining a copy\n
+of this software and associated documentation files (the "Software"), to deal\n
+in the Software without restriction, including without limitation the rights\n
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n
+copies of the Software, and to permit persons to whom the Software is\n
+furnished to do so, subject to the following conditions:\n
+
+The above copyright notice and this permission notice shall be included in all\n
+copies or substantial portions of the Software.\n
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n
+SOFTWARE.\n
+\n
+4. glide\n
+(https://github.com/bumptech/glide)\n
+
+License for everything not in third_party and not otherwise marked:\n
+
+Copyright 2014 Google, Inc. All rights reserved.\n
+
+Redistribution and use in source and binary forms, with or without modification, are\n
+permitted provided that the following conditions are met:\n
+
+   1. Redistributions of source code must retain the above copyright notice, this list of\n
+         conditions and the following disclaimer.\n
+
+   2. Redistributions in binary form must reproduce the above copyright notice, this list\n
+         of conditions and the following disclaimer in the documentation and/or other materials\n
+         provided with the distribution.\n
+
+THIS SOFTWARE IS PROVIDED BY GOOGLE, INC. ``AS IS\'\' AND ANY EXPRESS OR IMPLIED\n
+WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND\n
+FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL GOOGLE, INC. OR\n
+CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR\n
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR\n
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON\n
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING\n
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF\n
+ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n
+
+The views and conclusions contained in the software and documentation are those of the\n
+authors and should not be interpreted as representing official policies, either expressed\n
+or implied, of Google, Inc.\n
+---------------------------------------------------------------------------------------------
+License for third_party/disklrucache:\n
+
+Copyright 2012 Jake Wharton\n
+Copyright 2011 The Android Open Source Project\n
+
+Licensed under the Apache License, Version 2.0 (the "License");\n
+you may not use this file except in compliance with the License.\n
+You may obtain a copy of the License at\n
+
+   http://www.apache.org/licenses/LICENSE-2.0\n
+
+Unless required by applicable law or agreed to in writing, software\n
+distributed under the License is distributed on an "AS IS" BASIS,\n
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n
+See the License for the specific language governing permissions and\n
+limitations under the License.\n
+---------------------------------------------------------------------------------------------
+License for third_party/gif_decoder:\n
+
+Copyright © 2013 Xcellent Creations, Inc.\n
+
+Permission is hereby granted, free of charge, to any person obtaining\n
+a copy of this software and associated documentation files (the\n
+"Software"), to deal in the Software without restriction, including\n
+without limitation the rights to use, copy, modify, merge, publish,\n
+distribute, sublicense, and/or sell copies of the Software, and to\n
+permit persons to whom the Software is furnished to do so, subject to\n
+the following conditions:\n
+
+The above copyright notice and this permission notice shall be\n
+included in all copies or substantial portions of the Software.\n
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,\n
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\n
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND\n
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE\n
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION\n
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION\n
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n
+---------------------------------------------------------------------------------------------
+License for third_party/gif_encoder/AnimatedGifEncoder.java and\n
+third_party/gif_encoder/LZWEncoder.java:\n
+
+No copyright asserted on the source code of this class. May be used for any\n
+purpose, however, refer to the Unisys LZW patent for restrictions on use of\n
+the associated LZWEncoder class. Please forward any corrections to\n
+kweiner@fmsware.com.\n
+
+-----------------------------------------------------------------------------
+License for third_party/gif_encoder/NeuQuant.java\n
+
+Copyright © 1994 Anthony Dekker\n
+
+NEUQUANT Neural-Net quantization algorithm by Anthony Dekker, 1994. See\n
+"Kohonen neural networks for optimal colour quantization" in "Network:\n
+Computation in Neural Systems" Vol. 5 (1994) pp 351-367. for a discussion of\n
+the algorithm.\n
+
+Any party obtaining a copy of these files from the author, directly or\n
+indirectly, is granted, free of charge, a full and unrestricted irrevocable,\n
+world-wide, paid up, royalty-free, nonexclusive right and license to deal in\n
+this software and documentation files (the "Software"), including without\n
+limitation the rights to use, copy, modify, merge, publish, distribute,\n
+sublicense, and/or sell copies of the Software, and to permit persons who\n
+receive copies from any such party to do so, with the only requirement being\n
+that this copyright notice remain intact.\n
+
+
+    </string>
+    <string name="copy">복사하기</string>
+    <string name="paste">붙여넣기</string>
+    <string name="addItemAbove">위로 아이템 추가</string>
+    <string name="addItemBelow">아래로 아이템 추가</string>
+    <string name="settings">설정</string>
+    <string name="DeleteAllWork">모든 작업 삭제</string>
+    <string name="importVideo">영상 파일 가져오기</string>
+    <string name="importYoutubeVideo">유튜브 영상 가져오기</string>
+    <string name="hideVideo">영상 숨기기</string>
+    <string name="exportSubtitleFile">자막파일로 저장하기</string>
+    <string name="deleteAllItems">아이템 모두 삭제</string>
+    <string name="addItem">아이템 추가</string>
+    <string name="moveItem">해당 번호로 이동</string>
+    <string name="colorPalette">색상 팔레트</string>
+    <string name="importSubtitleFile">기존 자막파일 가져오기</string>
+    <string name="Select">선택</string>
+    <string name="settingWorkNameFileNameComment">작업명과 저장될 파일명을 지정합니다</string>
+    <string name="settingWorkNameFileName">작업명, 파일명 지정</string>
+    <string name="settingWorkNameComment">작업명을 지정해주세요</string>
+    <string name="settingFileNameComment">파일명을 지정해주세요</string>
+    <string name="fileName2">파일명</string>
+    <string name="workName2">작업명</string>
+    <string name="deleteAllworkComment">앱에 있는 모든 작업을 삭제합니다 삭제시 복구할 수 없습니다 신중히 결정해주세요</string>
+    <string name="Delete">삭제</string>
+    <string name="colorReferenceComment">자막에 입힐 글자 색상을 참고하세요</string>
+    <string name="copy2">복사</string>
+    <string name="deleteAllItemsTitle">모든 아이템 삭제</string>
+    <string name="scrollToItem">아이템 이동</string>
+    <string name="move">이동</string>
+    <string name="moveTo">(으)로 이동</string>
+    <string name="Last">마지막</string>
+    <string name="scrollComment">입력하신 번호로 스크롤 됩니다</string>
+    <string name="addItemComment">숫자를 입력하지 않으면 맨 끝에 추가됩니다</string>
+    <string name="addComment">에 추가</string>
+    <string name="add">추가</string>
+    <string name="completed">완료</string>
+    <string name="next">다음</string>
+    <string name="type">확장자</string>
+    <string name="supportComment">현재 srt 만 지원됩니다</string>
+    <string name="deleteAllItemsComment">모든 아이템을 삭제합니다 삭제시 복구할 수 없습니다 신중히 결정해주세요</string>
+    <string name="numberIsTooBig">숫자가 너무 큽니다</string>
+    <string name="empty_job_name">작업명_미지정</string>
+    <string name="fetchError">자막 파일을 읽을 수 없습니다</string>
+</resources>

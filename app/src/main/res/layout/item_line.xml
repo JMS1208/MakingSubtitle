@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/apk/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="5dp"
+    android:layout_marginEnd="5dp"
+    android:layout_marginBottom="5dp"
+    android:background="@drawable/ripple_effect"
+    android:elevation="1dp"
+    android:padding="10dp"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/time_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="10dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <FrameLayout
+            android:id="@+id/fl_index_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/start_time_auto_btn"
+            >
+
+            <TextView
+                android:id="@+id/index_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="@dimen/line_text_in_cube"
+                android:textColor="@color/black"
+                android:text="1"
+                android:fontFamily="@font/noto_sans_kr_medium_font_family"
+                android:includeFontPadding="false"
+                />
+        </FrameLayout>
+
+
+        <ImageButton
+            android:id="@+id/start_time_auto_btn"
+            android:layout_width="@dimen/btn_auto"
+            android:layout_height="@dimen/btn_auto"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_auto"
+            android:adjustViewBounds="true"
+            android:scaleType="centerInside"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/fl_index_tv"
+            app:layout_constraintEnd_toStartOf="@id/start_time_et"
+            />
+
+        <TextView
+            android:id="@+id/tv_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/start"
+            android:textSize="@dimen/sp_20"
+            android:fontFamily="@font/noto_sans_kr_medium_font_family"
+            android:includeFontPadding="false"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/start_time_et"
+            app:layout_constraintStart_toStartOf="@id/start_time_et"
+
+            />
+
+        <com.jms.makingsubtitle.data.model.TimeEditText
+            android:id="@+id/start_time_et"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tv_start"
+            app:layout_constraintStart_toEndOf="@id/start_time_auto_btn"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/end_time_auto_btn"
+            />
+
+        <ImageButton
+            android:id="@+id/end_time_auto_btn"
+            android:layout_width="@dimen/btn_auto"
+            android:layout_height="@dimen/btn_auto"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_auto"
+            android:adjustViewBounds="true"
+            android:scaleType="centerInside"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/start_time_et"
+            app:layout_constraintEnd_toStartOf="@id/end_time_et"
+            />
+
+        <TextView
+            android:id="@+id/tv_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/noto_sans_kr_medium_font_family"
+            android:includeFontPadding="false"
+            android:text="@string/end"
+            android:textSize="@dimen/sp_20"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="@id/end_time_et"
+            app:layout_constraintBottom_toTopOf="@id/end_time_et"
+
+            />
+
+        <com.jms.makingsubtitle.data.model.TimeEditText
+            android:id="@+id/end_time_et"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tv_end"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/end_time_auto_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <ImageView
+        android:id="@+id/dotted_line"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_marginTop="3dp"
+        android:layerType="software"
+        android:src="@drawable/dotted_line"
+        app:layout_constraintBottom_toTopOf="@id/line_content_et"
+        app:layout_constraintTop_toBottomOf="@id/time_ll" />
+
+
+    <EditText
+        android:id="@+id/line_content_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/transparent"
+        android:imeOptions="actionDone"
+        android:inputType="textMultiLine"
+        android:padding="10dp"
+        android:textSize="20sp"
+
+        android:hint="@string/timeLineEtComment"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dotted_line"
+        tools:text="여름의 한 가운 데에 우리가 있었다." />
+</androidx.constraintlayout.widget.ConstraintLayout>
