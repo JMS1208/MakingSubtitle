@@ -14,7 +14,7 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "MakingSubTitle"
-include ':app'
-include ':data'
 include ':presentation'
+include ':data'
+include ':data'
 include ':domain'

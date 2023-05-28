@@ -9,12 +9,12 @@ plugins {
 }
 
 android {
-    compileSdk 31
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.jms.makingsubtitle"
-        minSdk 21
-        targetSdk 31
+        minSdk 24
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -46,6 +46,9 @@ android {
 }
 
 dependencies {
+
+    implementation project(':domain')
+    implementation project(':data')
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'
